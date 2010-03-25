@@ -119,7 +119,7 @@ function onWindowResize()
 
 // DOCUMENT
 
-function onDocumentMouseDown()
+function onDocumentMouseDown( event )
 {
 	if (!isMenuMouseOver)
 		event.preventDefault();
@@ -341,11 +341,16 @@ function onMenuAbout()
 function onCanvasMouseDown( event )
 {
 	cleanPopUps();
-
+	
 	style.strokeStart( event.clientX, event.clientY );
 
 	window.addEventListener('mousemove', onCanvasMouseMove, false);
 	window.addEventListener('mouseup', onCanvasMouseUp, false);
+}
+
+function onCanvasMouseMove( event )
+{
+	style.stroke( event.clientX, event.clientY );
 }
 
 function onCanvasMouseUp()
@@ -356,10 +361,6 @@ function onCanvasMouseUp()
 	window.removeEventListener('mouseup', onCanvasMouseUp, false);
 }
 
-function onCanvasMouseMove()
-{
-	style.stroke( event.clientX, event.clientY );
-}
 
 //
 
