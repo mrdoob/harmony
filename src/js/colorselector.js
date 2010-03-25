@@ -32,7 +32,7 @@ ColorSelector.prototype =
 		this.hue.height = gradient.height;
 		
 		context = this.hue.getContext("2d");
-		context.drawImage(gradient, 0, 0);
+		context.drawImage(gradient, 0, 0, this.hue.width, this.hue.height);
 
 		this.hueData = context.getImageData(0, 0, this.hue.width, this.hue.height).data;	
 		
@@ -67,9 +67,9 @@ ColorSelector.prototype =
 		context.arc(7, 7, 6, 0, Math.PI * 2, true);
 		context.stroke();
 
-		this.container.appendChild(this.hueSelector);
+		this.container.appendChild( this.hueSelector );
 		
-		this.luminosityPosition = [	(gradient.width - 15), (gradient.height - 15) / 2 ];
+		this.luminosityPosition = [ (gradient.width - 15), (gradient.height - 15) / 2 ];
 		
 		this.luminositySelector = document.createElement("canvas");
 		this.luminositySelector.style.position = 'absolute';
@@ -79,7 +79,7 @@ ColorSelector.prototype =
 		this.luminositySelector.height = 15;
 		
 		context = this.luminositySelector.getContext("2d");
-		context.drawImage(this.hueSelector, 0, 0);
+		context.drawImage(this.hueSelector, 0, 0, this.luminositySelector.width, this.luminositySelector.height);
 		
 		this.container.appendChild(this.luminositySelector);
 	},

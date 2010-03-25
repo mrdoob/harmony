@@ -257,9 +257,39 @@ function onBackgroundColorSelectorMouseUp( event )
 	setBackgroundColor( event.clientX - backgroundColorSelector.container.offsetLeft, event.clientY - backgroundColorSelector.container.offsetTop );
 }
 
-function onBackgroundColorSelectorTouchStart()
+
+function onBackgroundColorSelectorTouchStart( event )
 {
-	
+	if(event.touches.length == 1)
+	{
+		event.preventDefault();
+		
+		setBackgroundColor( event.touches[0].pageX - backgroundColorSelector.container.offsetLeft, event.touches[0].pageY - backgroundColorSelector.container.offsetTop );
+		
+		window.addEventListener('touchmove', onBackgroundColorSelectorTouchMove, false);
+		window.addEventListener('touchend', onBackgroundColorSelectorTouchEnd, false);
+	}
+}
+
+function onBackgroundColorSelectorTouchMove( event )
+{
+	if(event.touches.length == 1)
+	{
+		event.preventDefault();
+		
+		setBackgroundColor( event.touches[0].pageX - backgroundColorSelector.container.offsetLeft, event.touches[0].pageY - backgroundColorSelector.container.offsetTop );
+	}
+}
+
+function onBackgroundColorSelectorTouchEnd( event )
+{
+	if(event.touches.length == 0)
+	{
+		event.preventDefault();
+		
+		window.removeEventListener('touchmove', onBackgroundColorSelectorTouchMove, false);
+		window.removeEventListener('touchend', onBackgroundColorSelectorTouchEnd, false);
+	}	
 }
 
 
