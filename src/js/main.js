@@ -246,7 +246,7 @@ function onBackgroundColorSelectorMouseDown( event )
 
 function onBackgroundColorSelectorMouseMove( event )
 {
-	setBackgroundColor( event.clientX - foregroundColorSelector.container.offsetLeft, event.clientY - foregroundColorSelector.container.offsetTop );
+	setBackgroundColor( event.clientX - backgroundColorSelector.container.offsetLeft, event.clientY - backgroundColorSelector.container.offsetTop );
 }
 
 function onBackgroundColorSelectorMouseUp( event )
@@ -254,7 +254,7 @@ function onBackgroundColorSelectorMouseUp( event )
 	window.removeEventListener('mousemove', onBackgroundColorSelectorMouseMove, false);
 	window.removeEventListener('mouseup', onBackgroundColorSelectorMouseUp, false);
 	
-	setBackgroundColor( event.clientX - foregroundColorSelector.container.offsetLeft, event.clientY - foregroundColorSelector.container.offsetTop );
+	setBackgroundColor( event.clientX - backgroundColorSelector.container.offsetLeft, event.clientY - backgroundColorSelector.container.offsetTop );
 }
 
 function onBackgroundColorSelectorTouchStart()
