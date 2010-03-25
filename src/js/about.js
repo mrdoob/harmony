@@ -18,23 +18,23 @@ About.prototype =
 		this.container.style.visibility = 'hidden';
 		
 		containerText = document.createElement("div");
-		containerText.style.margin = '20px 20px';
+		containerText.style.margin = '10px 10px';
 		containerText.style.textAlign = 'left';
 		this.container.appendChild(containerText);
 
 		text = document.createElement("p");
 		text.style.textAlign = 'center';		
-		text.innerHTML = '<strong>HARMONY</strong> v0.5 by <a href="http://twitter.com/mrdoob" target="_blank">Mr.doob</a>';
+		text.innerHTML = '<strong>HARMONY</strong> <a href="changelog.txt" target="_blank">v0.6</a> by <a href="http://twitter.com/mrdoob" target="_blank">Mr.doob</a>';
 		containerText.appendChild(text);
 
 		text = document.createElement("p");
 		text.style.textAlign = 'center';
-		text.innerHTML = 'Hold &lt;shift&gt; for colour palette';
+		text.innerHTML = 'Hold &lt;shift&gt; for colour palette<br />Press &lt;r&gt; for resetting brush';
 		containerText.appendChild(text);
 
 		text = document.createElement("p");
 		text.style.textAlign = 'center';
-		text.innerHTML = '<a href="http://mrdoob.com/blog/post/689" target="_blank">More info</a>';
+		text.innerHTML = '<a href="http://github.com/mrdoob/harmony" target="_blank">Source Code</a>';
 		containerText.appendChild(text);
 
 		text = document.createElement("hr");

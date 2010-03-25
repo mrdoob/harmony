@@ -59,7 +59,7 @@ circles.prototype =
 		this.prevMouseY = mouseY;
 	},
 
-	strokeEnd: function( mouseX, mouseY )
+	strokeEnd: function()
 	{
 		
 	}

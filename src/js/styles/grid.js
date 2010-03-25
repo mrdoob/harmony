@@ -44,7 +44,7 @@ grid.prototype =
 		}
 	},
 
-	strokeEnd: function( mouseX, mouseY )
+	strokeEnd: function()
 	{
 		
 	}

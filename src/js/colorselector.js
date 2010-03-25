@@ -96,8 +96,9 @@ ColorSelector.prototype =
 	
 	updateLuminosity: function( color )
 	{
-		var context, angle, shade, offsetx, offsety,
-		inner_radius = 100, outter_radius = 120, i, count = 1080 / 2, degreesToRadians = Math.PI / 180;
+		var context, angle, angle_cos, angle_sin, shade, offsetx, offsety,
+		inner_radius = 100, outter_radius = 120, i, count = 1080 / 2, oneDivCount = 1 / count, degreesToRadians = Math.PI / 180,
+		countDiv360 = (count / 360);
 		
 		offsetx = this.luminosity.width / 2;
 		offsety = this.luminosity.height / 2;
@@ -108,26 +109,25 @@ ColorSelector.prototype =
 		
 		for(i = 0; i < count; i++)
 		{
-			angle = i / (count / 360) * degreesToRadians;
+			angle = i / countDiv360 * degreesToRadians;
+			angle_cos = Math.cos(angle);
+			angle_sin = Math.sin(angle);
 
-			shade = 255 - (i / count) * 255;
+			shade = 255 - (i * oneDivCount /* / count */) * 255;
 			
 			context.strokeStyle = "rgb(" + Math.floor( color[0] - shade ) + "," + Math.floor( color[1] - shade ) + "," + Math.floor( color[2] - shade ) + ")";
 			context.beginPath();
-			context.moveTo(Math.cos(angle) * inner_radius + offsetx, Math.sin(angle) * inner_radius + offsety);
-			context.lineTo(Math.cos(angle) * outter_radius + offsetx, Math.sin(angle) * outter_radius + offsety);
+			context.moveTo(angle_cos * inner_radius + offsetx, angle_sin * inner_radius + offsety);
+			context.lineTo(angle_cos * outter_radius + offsetx, angle_sin * outter_radius + offsety);
 			context.stroke();
 		}
 		
 		this.luminosityData = context.getImageData(0, 0, this.luminosity.width, this.luminosity.height).data;
 	},
 	
-	update: function()
+	update: function(x, y)
 	{
-		var x, y, dx, dy, d, nx, ny;
-		
-		x = (mouseX - this.container.offsetLeft);
-		y = (mouseY - this.container.offsetTop);
+		var dx, dy, d, nx, ny;
 		
 		dx = x - 125;
 		dy = y - 125;

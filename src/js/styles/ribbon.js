@@ -61,7 +61,7 @@ ribbon.prototype =
 		this.mouseY = mouseY;
 	},
 
-	strokeEnd: function( mouseX, mouseY )
+	strokeEnd: function()
 	{
 	
 	},

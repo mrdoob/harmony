@@ -1,19 +1,18 @@
 function Palette()
 {
-	var canvas, context, offsetx, offsety, inner_radius = 0, outter_radius = 90, count = 1080 / 2, shades = 30,
-	segment, degreesToRadians = Math.PI / 180,
-	i, j, c, angle, shade;
+	var canvas, context, offsetx, offsety, radius = 90,
+	count = 1080, oneDivCount = 1 / count, countDiv360 = count / 360, degreesToRadians = Math.PI / 180,
+	i, color, angle, angle_cos, angle_sin, gradient;
 	
 	canvas = document.createElement("canvas");
 	canvas.width = 250;
 	canvas.height = 250;
 	
 	offsetx = canvas.width / 2;
-	offsety = canvas.height / 2;	
-	segment = (outter_radius - inner_radius) / shades;	
+	offsety = canvas.height / 2;
 	
 	context = canvas.getContext("2d");
-	context.lineWidth = 3;
+	context.lineWidth = 1;
 	
 	function HSB2RGB(hue, sat, val)
 	{
@@ -23,9 +22,9 @@ function Palette()
 		if (val == 0)
 			return [ 0, 0, 0 ];
 		
-		hue /= 60;
-		sat /= 100;
-		val /= 100;
+		hue *= 0.016666667; // /= 60;
+		sat *= 0.01; // /= 100;
+		val *= 0.01; // /= 100;
 			
 		i = Math.floor(hue);
 		f = hue - i;
@@ -50,20 +49,24 @@ function Palette()
 	
 	for(i = 0; i < count; i++)
 	{
-		c = HSB2RGB( Math.floor( (i / count) * 360 ), 100, 100);
-		angle = i / (count / 360) * degreesToRadians;
+		color = HSB2RGB( Math.floor( (i * oneDivCount) * 360 ), 100, 100);
+		angle = i / countDiv360 * degreesToRadians;
+		angle_cos = Math.cos(angle);
+		angle_sin = Math.sin(angle);
 		
-		for (j = 0; j < shades; j++)
-		{
-			shade = 255 - (j / shades) * 255;
-			
-			context.strokeStyle = "rgb(" + Math.floor( c[0] * 255 + shade ) + "," + Math.floor( c[1] * 255 + shade ) + "," + Math.floor( c[2] * 255 + shade ) + ")";
-			context.beginPath();
-			context.moveTo(Math.cos(angle) * (segment * j + inner_radius) + offsetx, Math.sin(angle) * (segment * j + inner_radius) + offsety);
-			context.lineTo(Math.cos(angle) * (segment * (j + 1) + inner_radius) + offsetx, Math.sin(angle) * (segment * (j + 1) + inner_radius) + offsety);
-			context.stroke();
-		}
+		context.strokeStyle = "rgb(" + Math.floor( color[0] * 255 ) + "," + Math.floor( color[1] * 255 ) + "," + Math.floor( color[2] * 255 ) + ")";
+		context.beginPath();
+		context.moveTo(angle_cos + offsetx, angle_sin + offsety);
+		context.lineTo(angle_cos * radius + offsetx, angle_sin * radius + offsety);
+		context.stroke();
 	}
+	
+	gradient = context.createRadialGradient(offsetx, offsetx, 0, offsetx, offsetx, radius);
+	gradient.addColorStop(0.1, 'rgba(255, 255, 255, 1)');
+	gradient.addColorStop(1, 'rgba(255, 255, 255, 0)');
+	
+	context.fillStyle = gradient;
+	context.fillRect(0, 0, canvas.width, canvas.height);
 	
 	return canvas;
 }

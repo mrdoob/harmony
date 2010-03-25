@@ -66,7 +66,7 @@ web.prototype =
 		this.count ++;
 	},
 
-	strokeEnd: function( mouseX, mouseY )
+	strokeEnd: function()
 	{
 		
 	}

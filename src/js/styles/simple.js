@@ -39,7 +39,7 @@ simple.prototype =
 		this.prevMouseY = mouseY;
 	},
 
-	strokeEnd: function( mouseX, mouseY )
+	strokeEnd: function()
 	{
 		
 	}

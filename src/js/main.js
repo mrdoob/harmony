@@ -1,14 +1,12 @@
 var i,
-style,
-STYLES = ["sketchy", "shaded", "chrome", "fur", "longfur", "web", "", "simple", "squares", "ribbon", "", "circles", "grid"],
+style, STYLES = ["sketchy", "shaded", "chrome", "fur", "longfur", "web", "", "simple", "squares", "ribbon", "", "circles", "grid"],
 COLOR = [0, 0, 0], BACKGROUND_COLOR = [250, 250, 250],
 SCREEN_WIDTH = window.innerWidth,
 SCREEN_HEIGHT = window.innerHeight,
-container, foregroundColorSelector, backgroundColorSelector, menu,  about,
+container, foregroundColorSelector, backgroundColorSelector, menu, about,
 canvas, flattenCanvas, context,
-mouseX = 0, mouseY = 0,
-isForegroundColorSelectorVisible = false, isBackgroundColorSelectorVisible = false, isAboutVisible = false;
-isMenuMouseOver = false, controlKeyIsDown = false
+isForegroundColorSelectorVisible = false, isBackgroundColorSelectorVisible = false, isAboutVisible = false,
+isMenuMouseOver = false, shiftKeyIsDown = false, altKeyIsDown = false;
 
 init();
 
@@ -30,7 +28,7 @@ function init()
 	flattenCanvas = document.createElement("canvas");
 	flattenCanvas.width = SCREEN_WIDTH;
 	flattenCanvas.height = SCREEN_HEIGHT;
-
+	
 	palette = new Palette();
 	
 	foregroundColorSelector = new ColorSelector(palette);
@@ -84,13 +82,13 @@ function init()
 	about = new About();
 	container.appendChild(about.container);
 	
-	window.onmousemove = onWindowMouseMove;
-	window.onresize = onWindowResize;
-	window.onkeydown = onDocumentKeyDown;
-	window.onkeyup = onDocumentKeyUp;
+	window.addEventListener('mousemove', onWindowMouseMove, false);
+	window.addEventListener('resize', onWindowResize, false);
+	window.addEventListener('keydown', onDocumentKeyDown, false);
+	window.addEventListener('keyup', onDocumentKeyUp, false);
 	
-	document.onmousedown = onDocumentMouseDown;
-	document.onmouseout = onCanvasMouseUp;
+	document.addEventListener('mousedown', onDocumentMouseDown, false);
+	document.addEventListener('mouseout', onCanvasMouseUp, false);
 	
 	canvas.addEventListener('mousedown', onCanvasMouseDown, false);
 	canvas.addEventListener('touchstart', onCanvasTouchStart, false);
@@ -101,10 +99,10 @@ function init()
 
 // WINDOW
 
-function onWindowMouseMove(e)
+function onWindowMouseMove( event )
 {
-	mouseX = e.clientX;
-	mouseY = e.clientY;
+	mouseX = event.clientX;
+	mouseY = event.clientY;
 }
 
 function onWindowResize()
@@ -123,127 +121,141 @@ function onWindowResize()
 
 function onDocumentMouseDown()
 {
-	return isMenuMouseOver;
+	if (!isMenuMouseOver)
+		event.preventDefault();
 }
 
-function onDocumentKeyDown(e)
+function onDocumentKeyDown( event )
 {
-	if (controlKeyIsDown)
+	if (shiftKeyIsDown)
 		return;
-
-	switch(e.keyCode)
+		
+	switch(event.keyCode)
 	{
 		case 16: // Shift
-			controlKeyIsDown = true;
+			shiftKeyIsDown = true;
 			foregroundColorSelector.container.style.left = mouseX - 125 + 'px';
 			foregroundColorSelector.container.style.top = mouseY - 125 + 'px';
 			foregroundColorSelector.container.style.visibility = 'visible';
 			break;
+		case 18: // Alt
+			altKeyIsDown = true;
+			break;
+		case 82: // r
+			style.destroy();
+			style = eval("new " + STYLES[menu.selector.selectedIndex] + "(context)");
+			break;
 	}
 }
 
-function onDocumentKeyUp(e)
+function onDocumentKeyUp( event )
 {
-	switch(e.keyCode)
+	switch(event.keyCode)
 	{
 		case 16: // Shift
-			controlKeyIsDown = false;
+			shiftKeyIsDown = false;
 			foregroundColorSelector.container.style.visibility = 'hidden';			
 			break;
+		case 18: // Alt
+			altKeyIsDown = false;
+			break;	
 	}
 }
 
 // COLOR SELECTORS
 
-function onForegroundColorSelectorMouseDown()
+function setForegroundColor( x, y )
+{
+	foregroundColorSelector.update( x, y );
+	COLOR = foregroundColorSelector.getColor();
+	menu.setForegroundColor( COLOR );	
+}
+
+function onForegroundColorSelectorMouseDown( event )
 {
 	window.addEventListener('mousemove', onForegroundColorSelectorMouseMove, false);
 	window.addEventListener('mouseup', onForegroundColorSelectorMouseUp, false);
+	
+	setForegroundColor( event.clientX - foregroundColorSelector.container.offsetLeft, event.clientY - foregroundColorSelector.container.offsetTop );	
 }
 
-function onForegroundColorSelectorMouseUp()
+function onForegroundColorSelectorMouseMove( event )
+{
+	setForegroundColor( event.clientX - foregroundColorSelector.container.offsetLeft, event.clientY - foregroundColorSelector.container.offsetTop );
+}
+
+function onForegroundColorSelectorMouseUp( event )
 {
 	window.removeEventListener('mousemove', onForegroundColorSelectorMouseMove, false);
 	window.removeEventListener('mouseup', onForegroundColorSelectorMouseUp, false);
 
-	foregroundColorSelector.update();
-	COLOR = foregroundColorSelector.getColor();
-	menu.setForegroundColor( COLOR );
+	setForegroundColor( event.clientX - foregroundColorSelector.container.offsetLeft, event.clientY - foregroundColorSelector.container.offsetTop );
 }
 
-function onForegroundColorSelectorMouseMove()
+function onForegroundColorSelectorTouchStart( event )
 {
-	foregroundColorSelector.update();
-	COLOR = foregroundColorSelector.getColor();
-	menu.setForegroundColor( COLOR );
-}
-
-//
-
-function onForegroundColorSelectorTouchStart(e)
-{
-	if(e.touches.length == 1)
+	if(event.touches.length == 1)
 	{
-		var touch = e.touches[0];
+		event.preventDefault();
+		
+		setForegroundColor( event.touches[0].pageX - foregroundColorSelector.container.offsetLeft, event.touches[0].pageY - foregroundColorSelector.container.offsetTop );
 		
 		window.addEventListener('touchmove', onForegroundColorSelectorTouchMove, false);
 		window.addEventListener('touchend', onForegroundColorSelectorTouchEnd, false);
+	}
+}
+
+function onForegroundColorSelectorTouchMove( event )
+{
+	if(event.touches.length == 1)
+	{
+		event.preventDefault();
 		
-		return false;
+		setForegroundColor( event.touches[0].pageX - foregroundColorSelector.container.offsetLeft, event.touches[0].pageY - foregroundColorSelector.container.offsetTop );
 	}
 }
 
-function onForegroundColorSelectorTouchMove(e)
+function onForegroundColorSelectorTouchEnd( event )
 {
-	if(e.touches.length == 1)
+	if(event.touches.length == 0)
 	{
-		var touch = e.touches[0];
-		style.strokeEnd( touch.pageX, touch.pageY );
-
-	
-	}
-}
-
-function onForegroundColorSelectorTouchEnd(e)
-{
-	if(e.touches.length == 1)
-	{
+		event.preventDefault();
+		
 		window.removeEventListener('touchmove', onForegroundColorSelectorTouchMove, false);
-		window.removeEventListener('touchend', onForegroundColorSelectorTouchEnd, false);	
+		window.removeEventListener('touchend', onForegroundColorSelectorTouchEnd, false);
 	}	
 }
 
 
 //
 
-function onBackgroundColorSelectorMouseDown()
+function setBackgroundColor( x, y )
 {
-	window.addEventListener('mousemove', onBackgroundColorSelectorMouseMove, false);
-	window.addEventListener('mouseup', onBackgroundColorSelectorMouseUp, false);
-}
-
-function onBackgroundColorSelectorMouseUp()
-{
-	window.removeEventListener('mousemove', onBackgroundColorSelectorMouseMove, false);
-	window.removeEventListener('mouseup', onBackgroundColorSelectorMouseUp, false);
-	
-	backgroundColorSelector.update();
+	backgroundColorSelector.update( x, y );
 	BACKGROUND_COLOR = backgroundColorSelector.getColor();
 	menu.setBackgroundColor( BACKGROUND_COLOR );
 	
 	document.body.style.backgroundColor = 'rgb(' + BACKGROUND_COLOR[0] + ', ' + BACKGROUND_COLOR[1] + ', ' + BACKGROUND_COLOR[2] + ')';	
 }
 
-function onBackgroundColorSelectorMouseMove()
+function onBackgroundColorSelectorMouseDown( event )
 {
-	backgroundColorSelector.update();
-	BACKGROUND_COLOR = backgroundColorSelector.getColor();
-	menu.setBackgroundColor( BACKGROUND_COLOR );
-	
-	document.body.style.backgroundColor = 'rgb(' + BACKGROUND_COLOR[0] + ', ' + BACKGROUND_COLOR[1] + ', ' + BACKGROUND_COLOR[2] + ')';
+	window.addEventListener('mousemove', onBackgroundColorSelectorMouseMove, false);
+	window.addEventListener('mouseup', onBackgroundColorSelectorMouseUp, false);
 }
 
-//
+function onBackgroundColorSelectorMouseMove( event )
+{
+	setBackgroundColor( event.clientX - foregroundColorSelector.container.offsetLeft, event.clientY - foregroundColorSelector.container.offsetTop );
+}
+
+function onBackgroundColorSelectorMouseUp( event )
+{
+	window.removeEventListener('mousemove', onBackgroundColorSelectorMouseMove, false);
+	window.removeEventListener('mouseup', onBackgroundColorSelectorMouseUp, false);
+	
+	setBackgroundColor( event.clientX - foregroundColorSelector.container.offsetLeft, event.clientY - foregroundColorSelector.container.offsetTop );
+}
 
 function onBackgroundColorSelectorTouchStart()
 {
@@ -311,6 +323,7 @@ function onMenuClear()
 {
 	context.clearRect(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
 
+	style.destroy();
 	style = eval("new " + STYLES[menu.selector.selectedIndex] + "(context)");
 }
 
@@ -325,11 +338,11 @@ function onMenuAbout()
 
 // CANVAS
 
-function onCanvasMouseDown()
+function onCanvasMouseDown( event )
 {
 	cleanPopUps();
 
-	style.strokeStart( mouseX, mouseY );
+	style.strokeStart( event.clientX, event.clientY );
 
 	window.addEventListener('mousemove', onCanvasMouseMove, false);
 	window.addEventListener('mouseup', onCanvasMouseUp, false);
@@ -337,7 +350,7 @@ function onCanvasMouseDown()
 
 function onCanvasMouseUp()
 {
-	style.strokeEnd( mouseX, mouseY );
+	style.strokeEnd();
 	
 	window.removeEventListener('mousemove', onCanvasMouseMove, false);	
 	window.removeEventListener('mouseup', onCanvasMouseUp, false);
@@ -345,46 +358,45 @@ function onCanvasMouseUp()
 
 function onCanvasMouseMove()
 {
-	style.stroke( mouseX, mouseY );
+	style.stroke( event.clientX, event.clientY );
 }
 
 //
 
-function onCanvasTouchStart(e)
+function onCanvasTouchStart( event )
 {
-	if(e.touches.length == 1)
+	cleanPopUps();		
+
+	if(event.touches.length == 1)
 	{
-		var touch = e.touches[0];
-		style.strokeStart( touch.pageX, touch.pageY );
+		event.preventDefault();
+		
+		style.strokeStart( event.touches[0].pageX, event.touches[0].pageY );
 		
 		window.addEventListener('touchmove', onCanvasTouchMove, false);
 		window.addEventListener('touchend', onCanvasTouchEnd, false);
+	}
+}
+
+function onCanvasTouchMove( event )
+{
+	if(event.touches.length == 1)
+	{
+		event.preventDefault();
+		style.stroke( event.touches[0].pageX, event.touches[0].pageY );
+	}
+}
+
+function onCanvasTouchEnd( event )
+{
+	if(event.touches.length == 0)
+	{
+		event.preventDefault();
 		
-		return false;
-	}
-}
-
-function onCanvasTouchMove(e)
-{
-	if(e.touches.length == 1)
-	{
-		var touch = e.touches[0];
-		style.stroke( touch.pageX, touch.pageY );
-		return false;
-	}
-}
-
-function onCanvasTouchEnd(e)
-{
-	if(e.touches.length == 1)
-	{
-		var touch = e.touches[0];
-		style.strokeEnd( touch.pageX, touch.pageY );
+		style.strokeEnd();
 
 		window.removeEventListener('touchmove', onCanvasTouchMove, false);
 		window.removeEventListener('touchend', onCanvasTouchEnd, false);
-
-		return false;
 	}
 }
 
