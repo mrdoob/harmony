@@ -1,5 +1,4 @@
-var i,
-style, STYLES = ["sketchy", "shaded", "chrome", "fur", "longfur", "web", "", "simple", "squares", "ribbon", "", "circles", "grid"],
+var i, brush, BRUSHES = ["sketchy", "shaded", "chrome", "fur", "longfur", "web", "", "simple", "squares", "ribbon", "", "circles", "grid"],
 COLOR = [0, 0, 0], BACKGROUND_COLOR = [250, 250, 250],
 SCREEN_WIDTH = window.innerWidth,
 SCREEN_HEIGHT = window.innerHeight,
@@ -63,20 +62,20 @@ function init()
 	{
 		hash = window.location.hash.substr(1,window.location.hash.length);
 
-		for (i = 0; i < STYLES.length; i++)
+		for (i = 0; i < BRUSHES.length; i++)
 		{
-			if (hash == STYLES[i])
+			if (hash == BRUSHES[i])
 			{
-				style = eval("new " + STYLES[i] + "(context)");
+				brush = eval("new " + BRUSHES[i] + "(context)");
 				menu.selector.selectedIndex = i;
 				break;
 			}
 		}
 	}
 
-	if (!style)
+	if (!brush)
 	{
-		style = eval("new " + STYLES[0] + "(context)");
+		brush = eval("new " + BRUSHES[0] + "(context)");
 	}
 	
 	about = new About();
@@ -142,8 +141,8 @@ function onDocumentKeyDown( event )
 			altKeyIsDown = true;
 			break;
 		case 82: // r
-			style.destroy();
-			style = eval("new " + STYLES[menu.selector.selectedIndex] + "(context)");
+			brush.destroy();
+			brush = eval("new " + BRUSHES[menu.selector.selectedIndex] + "(context)");
 			break;
 	}
 }
@@ -319,13 +318,13 @@ function onMenuBackgroundColor()
 
 function onMenuSelectorChange()
 {
-	if (STYLES[menu.selector.selectedIndex] == "")
+	if (BRUSHES[menu.selector.selectedIndex] == "")
 		return;
 
-	style.destroy();
-	style = eval("new " + STYLES[menu.selector.selectedIndex] + "(context)");
+	brush.destroy();
+	brush = eval("new " + BRUSHES[menu.selector.selectedIndex] + "(context)");
 
-	window.location.hash = STYLES[menu.selector.selectedIndex];
+	window.location.hash = BRUSHES[menu.selector.selectedIndex];
 }
 
 function onMenuMouseOver()
@@ -353,8 +352,8 @@ function onMenuClear()
 {
 	context.clearRect(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
 
-	style.destroy();
-	style = eval("new " + STYLES[menu.selector.selectedIndex] + "(context)");
+	brush.destroy();
+	brush = eval("new " + BRUSHES[menu.selector.selectedIndex] + "(context)");
 }
 
 function onMenuAbout()
@@ -372,7 +371,7 @@ function onCanvasMouseDown( event )
 {
 	cleanPopUps();
 	
-	style.strokeStart( event.clientX, event.clientY );
+	brush.strokeStart( event.clientX, event.clientY );
 
 	window.addEventListener('mousemove', onCanvasMouseMove, false);
 	window.addEventListener('mouseup', onCanvasMouseUp, false);
@@ -380,12 +379,12 @@ function onCanvasMouseDown( event )
 
 function onCanvasMouseMove( event )
 {
-	style.stroke( event.clientX, event.clientY );
+	brush.stroke( event.clientX, event.clientY );
 }
 
 function onCanvasMouseUp()
 {
-	style.strokeEnd();
+	brush.strokeEnd();
 	
 	window.removeEventListener('mousemove', onCanvasMouseMove, false);	
 	window.removeEventListener('mouseup', onCanvasMouseUp, false);
@@ -402,7 +401,7 @@ function onCanvasTouchStart( event )
 	{
 		event.preventDefault();
 		
-		style.strokeStart( event.touches[0].pageX, event.touches[0].pageY );
+		brush.strokeStart( event.touches[0].pageX, event.touches[0].pageY );
 		
 		window.addEventListener('touchmove', onCanvasTouchMove, false);
 		window.addEventListener('touchend', onCanvasTouchEnd, false);
@@ -414,7 +413,7 @@ function onCanvasTouchMove( event )
 	if(event.touches.length == 1)
 	{
 		event.preventDefault();
-		style.stroke( event.touches[0].pageX, event.touches[0].pageY );
+		brush.stroke( event.touches[0].pageX, event.touches[0].pageY );
 	}
 }
 
@@ -424,7 +423,7 @@ function onCanvasTouchEnd( event )
 	{
 		event.preventDefault();
 		
-		style.strokeEnd();
+		brush.strokeEnd();
 
 		window.removeEventListener('touchmove', onCanvasTouchMove, false);
 		window.removeEventListener('touchend', onCanvasTouchEnd, false);

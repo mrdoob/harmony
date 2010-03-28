@@ -50,11 +50,11 @@ Menu.prototype =
 		
 		this.selector = document.createElement("select");
 
-		for (i = 0; i < STYLES.length; i++)
+		for (i = 0; i < BRUSHES.length; i++)
 		{
 			option = document.createElement("option");
 			option.id = i;
-			option.innerHTML = STYLES[i].toUpperCase();
+			option.innerHTML = BRUSHES[i].toUpperCase();
 			this.selector.appendChild(option);
 		}
 
