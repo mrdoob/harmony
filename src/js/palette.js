@@ -14,38 +14,7 @@ function Palette()
 	context = canvas.getContext("2d");
 	context.lineWidth = 1;
 	
-	function HSB2RGB(hue, sat, val)
-	{
-		var red, green, blue,
-		i, f, p, q, t;
-
-		if (val == 0)
-			return [ 0, 0, 0 ];
-		
-		hue *= 0.016666667; // /= 60;
-		sat *= 0.01; // /= 100;
-		val *= 0.01; // /= 100;
-			
-		i = Math.floor(hue);
-		f = hue - i;
-		p = val * (1 - sat);
-		q = val * (1 - (sat * f));
-		t = val * (1 - (sat * (1 - f)));
-		
-		switch(i)
-		{
-			case 0: red = val; green = t; blue = p; break;
-			case 1: red = q; green = val; blue = p; break;
-			case 2: red = p; green = val; blue = t; break;
-			case 3: red = p; green = q; blue = val; break;
-			case 4: red = t; green = p; blue = val; break;
-			case 5: red = val; green = p; blue = q; break;
-		}
-		
-		return [red, green, blue];
-	}
-	
-	// http://www.boostworthy.com/blog/?p=226	
+	// http://www.boostworthy.com/blog/?p=226
 	
 	for(i = 0; i < count; i++)
 	{
