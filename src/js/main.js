@@ -7,15 +7,12 @@ canvas, flattenCanvas, context,
 isFgColorSelectorVisible = false, isBgColorSelectorVisible = false, isAboutVisible = false,
 isMenuMouseOver = false, shiftKeyIsDown = false, altKeyIsDown = false;
 
-
 init();
 
 function init()
 {
 	var hash, palette;
 	
-	document.body.style.backgroundColor = 'rgb(' + BACKGROUND_COLOR[0] + ', ' + BACKGROUND_COLOR[1] + ', ' + BACKGROUND_COLOR[2] + ')';
-
 	container = document.createElement('div');
 	document.body.appendChild(container);
 	
@@ -54,6 +51,9 @@ function init()
 	menu.container.onmouseover = onMenuMouseOver;
 	menu.container.onmouseout = onMenuMouseOut;
 	container.appendChild(menu.container);
+
+	foregroundColorSelector.setColor( COLOR );
+	backgroundColorSelector.setColor( BACKGROUND_COLOR );
 
 	context = canvas.getContext("2d");
 	
@@ -225,17 +225,15 @@ function onMenuMouseOut()
 
 function onMenuSave()
 {
-	var context = flattenCanvas.getContext("2d");
-	
-	context.fillStyle = 'rgb(' + BACKGROUND_COLOR[0] + ', ' + BACKGROUND_COLOR[1] + ', ' + BACKGROUND_COLOR[2] + ')';
-	context.fillRect(0, 0, canvas.width, canvas.height);
-	context.drawImage(canvas, 0, 0);
-
+	flatten();
 	window.open(flattenCanvas.toDataURL("image/png"),'mywindow');
 }
 
 function onMenuClear()
 {
+	if (!confirm("Are you sure?"))
+		return;
+		
 	context.clearRect(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
 
 	brush.destroy();
@@ -255,7 +253,21 @@ function onMenuAbout()
 
 function onCanvasMouseDown( event )
 {
+	var data, position;
+
 	cleanPopUps();
+	
+	if (altKeyIsDown)
+	{
+		flatten();
+		
+		data = flattenCanvas.getContext("2d").getImageData(0, 0, flattenCanvas.width, flattenCanvas.height).data;
+		position = (event.clientX + (event.clientY * canvas.width)) * 4;
+		
+		foregroundColorSelector.setColor( [ data[position], data[position + 1], data[position + 2] ] );
+		
+		return;
+	}
 	
 	brush.strokeStart( event.clientX, event.clientY );
 
@@ -317,6 +329,15 @@ function onCanvasTouchEnd( event )
 }
 
 //
+
+function flatten()
+{
+	var context = flattenCanvas.getContext("2d");
+	
+	context.fillStyle = 'rgb(' + BACKGROUND_COLOR[0] + ', ' + BACKGROUND_COLOR[1] + ', ' + BACKGROUND_COLOR[2] + ')';
+	context.fillRect(0, 0, canvas.width, canvas.height);
+	context.drawImage(canvas, 0, 0);
+}
 
 function cleanPopUps()
 {

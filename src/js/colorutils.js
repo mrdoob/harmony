@@ -37,7 +37,7 @@ function RGB2HSB(red, green, blue)
 	val = Math.max( Math.max( red, green ), blue );
 
 	if (x==val)
-		return [null, 0, val*100];
+		return [0, 0, val*100];
 
 	f = (red == x) ? green - blue : ((green == x) ? blue - red : red - green);
 	i = (red == x) ? 3 : ((green == x) ? 5 : 1);

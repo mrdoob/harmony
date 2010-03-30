@@ -24,12 +24,12 @@ About.prototype =
 
 		text = document.createElement("p");
 		text.style.textAlign = 'center';		
-		text.innerHTML = '<strong>HARMONY</strong> <a href="changelog.txt" target="_blank">v0.6</a> by <a href="http://twitter.com/mrdoob" target="_blank">Mr.doob</a>';
+		text.innerHTML = '<strong>HARMONY</strong> <a href="changelog.txt" target="_blank">r3</a> by <a href="http://twitter.com/mrdoob" target="_blank">Mr.doob</a>';
 		containerText.appendChild(text);
 
 		text = document.createElement("p");
 		text.style.textAlign = 'center';
-		text.innerHTML = 'Hold &lt;shift&gt; for colour palette<br />Press &lt;r&gt; for resetting brush';
+		text.innerHTML = '&lt;shift&gt; display color selector<br />&lt;alt&gt;+&lt;click&gt; color picker<br />&lt;r&gt; reset brush';
 		containerText.appendChild(text);
 
 		text = document.createElement("p");

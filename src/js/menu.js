@@ -31,7 +31,7 @@ Menu.prototype =
 		this.foregroundColor.height = color_height;
 		this.container.appendChild(this.foregroundColor);
 		
-		this.setForegroundColor( [0, 0, 0] );
+		this.setForegroundColor( COLOR );
 		
 		space = document.createTextNode(" ");
 		this.container.appendChild(space);
@@ -43,7 +43,7 @@ Menu.prototype =
 		this.backgroundColor.height = color_height;
 		this.container.appendChild(this.backgroundColor);
 
-		this.setBackgroundColor( [250, 250, 250] );
+		this.setBackgroundColor( BACKGROUND_COLOR );
 		
 		space = document.createTextNode(" ");
 		this.container.appendChild(space);		
