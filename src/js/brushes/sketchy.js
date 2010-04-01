@@ -14,7 +14,7 @@ sketchy.prototype =
 	init: function( context )
 	{
 		this.context = context;
-		this.context.lineWidth = 1;
+		this.context.lineWidth = BRUSH_SIZE;
 		this.context.globalCompositeOperation = 'source-over';
 
 		this.points = new Array();

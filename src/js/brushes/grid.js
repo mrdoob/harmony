@@ -10,7 +10,7 @@ grid.prototype =
 	init: function( context )
 	{
 		this.context = context;
-		this.context.lineWidth = 1;
+		this.context.lineWidth = BRUSH_SIZE;
 
 		if (RegExp(" AppleWebKit/").test(navigator.userAgent))
 			this.context.globalCompositeOperation = 'darker';

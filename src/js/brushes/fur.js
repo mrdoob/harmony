@@ -14,7 +14,7 @@ fur.prototype =
 	init: function( context )
 	{
 		this.context = context;
-		this.context.lineWidth = 1;
+		this.context.lineWidth = BRUSH_SIZE;
 
 		this.points = new Array();
 		this.count = 0;

@@ -1,5 +1,6 @@
-var i, brush, BRUSHES = ["sketchy", "shaded", "chrome", "fur", "longfur", "web", "", "simple", "squares", "ribbon", "", "circles", "grid"],
-COLOR = [0, 0, 0], BACKGROUND_COLOR = [250, 250, 250],
+var REV = 4, USER_AGENT = navigator.userAgent.toLowerCase(), i,
+brush, BRUSHES = ["sketchy", "shaded", "chrome", "fur", "longfur", "web", "", "simple", "squares", "ribbon", "", "circles", "grid"],
+BRUSH_SIZE = 1, COLOR = [0, 0, 0], BACKGROUND_COLOR = [250, 250, 250],
 SCREEN_WIDTH = window.innerWidth,
 SCREEN_HEIGHT = window.innerHeight,
 container, foregroundColorSelector, backgroundColorSelector, menu, about,
@@ -12,6 +13,9 @@ init();
 function init()
 {
 	var hash, palette;
+	
+	if (USER_AGENT.search("androi") > 1 || USER_AGENT.search("iphone") > 1)
+		BRUSH_SIZE = 2;	
 	
 	container = document.createElement('div');
 	document.body.appendChild(container);

@@ -14,7 +14,7 @@ squares.prototype =
 		this.context = context;
 		this.context.globalCompositeOperation = 'source-over';
 		this.context.fillStyle = "rgb(255, 255, 255)";
-		this.context.lineWidth = 1;
+		this.context.lineWidth = BRUSH_SIZE;
 	},
 
 	destroy: function()

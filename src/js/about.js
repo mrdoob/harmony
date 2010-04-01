@@ -24,7 +24,7 @@ About.prototype =
 
 		text = document.createElement("p");
 		text.style.textAlign = 'center';		
-		text.innerHTML = '<strong>HARMONY</strong> <a href="changelog.txt" target="_blank">r3</a> by <a href="http://twitter.com/mrdoob" target="_blank">Mr.doob</a>';
+		text.innerHTML = '<strong>HARMONY</strong> <a href="changelog.txt" target="_blank">r' + REV + '</a> by <a href="http://twitter.com/mrdoob" target="_blank">Mr.doob</a>';
 		containerText.appendChild(text);
 
 		text = document.createElement("p");

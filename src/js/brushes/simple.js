@@ -13,7 +13,7 @@ simple.prototype =
 	{
 		this.context = context;
 		this.context.globalCompositeOperation = 'source-over';
-		this.context.lineWidth = 0.5;
+		this.context.lineWidth = BRUSH_SIZE;
 	},
 
 	destroy: function()
