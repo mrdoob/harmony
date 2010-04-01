@@ -3,6 +3,7 @@ brush, BRUSHES = ["sketchy", "shaded", "chrome", "fur", "longfur", "web", "", "s
 BRUSH_SIZE = 1, COLOR = [0, 0, 0], BACKGROUND_COLOR = [250, 250, 250],
 SCREEN_WIDTH = window.innerWidth,
 SCREEN_HEIGHT = window.innerHeight,
+mouseX = 0, mouseY = 0,
 container, foregroundColorSelector, backgroundColorSelector, menu, about,
 canvas, flattenCanvas, context,
 isFgColorSelectorVisible = false, isBgColorSelectorVisible = false, isAboutVisible = false,
