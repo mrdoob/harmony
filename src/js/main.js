@@ -14,7 +14,7 @@ function init()
 {
 	var hash, palette;
 	
-	if (USER_AGENT.search("androi") > 1 || USER_AGENT.search("iphone") > 1)
+	if (USER_AGENT.search("androi") > -1 || USER_AGENT.search("iphone") > -1)
 		BRUSH_SIZE = 2;	
 	
 	container = document.createElement('div');
