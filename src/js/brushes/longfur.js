@@ -25,7 +25,6 @@ longfur.prototype =
 
 	strokeStart: function( mouseX, mouseY )
 	{
-		this.context.strokeStyle = "rgba(" + COLOR[0] + ", " + COLOR[1] + ", " + COLOR[2] + ", 0.05 )";	
 	},
 
 	stroke: function( mouseX, mouseY )
@@ -33,6 +32,8 @@ longfur.prototype =
 		var i, size, dx, dy, d;
 
 		this.points.push( [ mouseX, mouseY ] );
+		
+		this.context.strokeStyle = "rgba(" + COLOR[0] + ", " + COLOR[1] + ", " + COLOR[2] + ", " + 0.05 * BRUSH_PRESSURE + ")";
 
 		for (i = 0; i < this.points.length; i++)
 		{

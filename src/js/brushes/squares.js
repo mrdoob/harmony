@@ -13,7 +13,6 @@ squares.prototype =
 	{
 		this.context = context;
 		this.context.globalCompositeOperation = 'source-over';
-		this.context.fillStyle = "rgb(255, 255, 255)";
 		this.context.lineWidth = BRUSH_SIZE;
 	},
 
@@ -25,8 +24,6 @@ squares.prototype =
 	{
 		this.prevMouseX = mouseX;
 		this.prevMouseY = mouseY;
-		
-		this.context.strokeStyle = "rgb(" + COLOR[0] + ", " + COLOR[1] + ", " + COLOR[2] + ")";		
 	},
 
 	stroke: function( mouseX, mouseY )
@@ -39,6 +36,9 @@ squares.prototype =
 		px = Math.cos(angle) * dx - Math.sin(angle) * dy;
 		py = Math.sin(angle) * dx + Math.cos(angle) * dy;
 
+		this.context.fillStyle = "rgba(" + BACKGROUND_COLOR[0] + ", " + BACKGROUND_COLOR[1] + ", " + BACKGROUND_COLOR[2] + ", " + BRUSH_PRESSURE + ")";
+		this.context.strokeStyle = "rgba(" + COLOR[0] + ", " + COLOR[1] + ", " + COLOR[2] + ", " + BRUSH_PRESSURE + ")";
+		
 		this.context.beginPath();
 		this.context.moveTo(this.prevMouseX - px, this.prevMouseY - py);
 		this.context.lineTo(this.prevMouseX + px, this.prevMouseY + py);

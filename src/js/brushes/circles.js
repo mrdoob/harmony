@@ -9,15 +9,13 @@ circles.prototype =
 
 	prevMouseX: null, prevMouseY: null,
 
-	points: null, count: null,
+	count: null,
 
 	init: function( context )
 	{
 		this.context = context;
 		this.context.lineWidth = BRUSH_SIZE;
 		this.context.globalCompositeOperation = 'source-over';
-
-		this.points = new Array();
 	},
 
 	destroy: function()
@@ -28,15 +26,13 @@ circles.prototype =
 	{
 		this.prevMouseX = mouseX;
 		this.prevMouseY = mouseY;
-		
-		this.context.strokeStyle = "rgba(" + COLOR[0] + ", " + COLOR[1] + ", " + COLOR[2] + ", 0.1)";		
 	},
 
 	stroke: function( mouseX, mouseY )
 	{
 		var i, dx, dy, d, cx, cy, steps, step_delta;
 
-		this.points.push( [ mouseX, mouseY ] );
+		this.context.strokeStyle = "rgba(" + COLOR[0] + ", " + COLOR[1] + ", " + COLOR[2] + ", " + 0.1 * BRUSH_PRESSURE + ")";	
 
 		dx = mouseX - this.prevMouseX;
 		dy = mouseY - this.prevMouseY;

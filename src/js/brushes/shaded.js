@@ -45,7 +45,7 @@ shaded.prototype =
 
 			if (d < 1000)
 			{
-				this.context.strokeStyle = "rgba(" + COLOR[0] + ", " + COLOR[1] + ", " + COLOR[2] + ", " + ((1 - (d / 1000)) * 0.1) + " )";
+				this.context.strokeStyle = "rgba(" + COLOR[0] + ", " + COLOR[1] + ", " + COLOR[2] + ", " + ((1 - (d / 1000)) * 0.1 * BRUSH_PRESSURE) + " )";
 
 				this.context.beginPath();
 				this.context.moveTo( this.points[this.count][0], this.points[this.count][1]);

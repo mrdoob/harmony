@@ -39,7 +39,7 @@ chrome.prototype =
 		
 		this.points.push( [ mouseX, mouseY ] );
 
-		this.context.strokeStyle = "rgba(" + COLOR[0] + ", " + COLOR[1] + ", " + COLOR[2] + ", 0.1)";
+		this.context.strokeStyle = "rgba(" + COLOR[0] + ", " + COLOR[1] + ", " + COLOR[2] + ", " + 0.1 * BRUSH_PRESSURE + ")";
 		this.context.beginPath();
 		this.context.moveTo(this.prevMouseX, this.prevMouseY);
 		this.context.lineTo(mouseX, mouseY);
@@ -53,7 +53,7 @@ chrome.prototype =
 
 			if (d < 1000)
 			{
-				this.context.strokeStyle = "rgba(" + Math.floor(Math.random() * COLOR[0]) + ", " + Math.floor(Math.random() * COLOR[1]) + ", " + Math.floor(Math.random() * COLOR[2]) + ", 0.1 )";
+				this.context.strokeStyle = "rgba(" + Math.floor(Math.random() * COLOR[0]) + ", " + Math.floor(Math.random() * COLOR[1]) + ", " + Math.floor(Math.random() * COLOR[2]) + ", " + 0.1 * BRUSH_PRESSURE + " )";
 				this.context.beginPath();
 				this.context.moveTo( this.points[this.count][0] + (dx * 0.2), this.points[this.count][1] + (dy * 0.2));
 				this.context.lineTo( this.points[i][0] - (dx * 0.2), this.points[i][1] - (dy * 0.2));

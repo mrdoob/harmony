@@ -37,13 +37,13 @@ web.prototype =
 
 		this.points.push( [ mouseX, mouseY ] );
 
-		this.context.strokeStyle = "rgba(" + COLOR[0] + ", " + COLOR[1] + ", " + COLOR[2] + ", 0.5)";
+		this.context.strokeStyle = "rgba(" + COLOR[0] + ", " + COLOR[1] + ", " + COLOR[2] + ", " + 0.5 * BRUSH_PRESSURE + ")";
 		this.context.beginPath();
 		this.context.moveTo(this.prevMouseX, this.prevMouseY);
 		this.context.lineTo(mouseX, mouseY);
 		this.context.stroke();
 
-		this.context.strokeStyle = "rgba(" + COLOR[0] + ", " + COLOR[1] + ", " + COLOR[2] + ", 0.1)";
+		this.context.strokeStyle = "rgba(" + COLOR[0] + ", " + COLOR[1] + ", " + COLOR[2] + ", " + 0.1 * BRUSH_PRESSURE + ")";
 
 		for (i = 0; i < this.points.length; i++)
 		{

@@ -31,14 +31,14 @@ ribbon.prototype =
 			this.painters.push({ dx: SCREEN_WIDTH / 2, dy: SCREEN_HEIGHT / 2, ax: 0, ay: 0, div: 0.1, ease: Math.random() * 0.2 + 0.6 });
 		}
 		
-		this.isDrawing = false;
-
 		this.interval = setInterval( update, 1000/60 );
 		
 		function update()
 		{
 			var i;
-
+			
+			this.context.strokeStyle = "rgba(" + COLOR[0] + ", " + COLOR[1] + ", " + COLOR[2] + ", " + 0.05 * BRUSH_PRESSURE + ")";
+			
 			for (i = 0; i < scope.painters.length; i++)
 			{
 				scope.context.beginPath();
@@ -62,8 +62,6 @@ ribbon.prototype =
 		this.mouseX = mouseX;
 		this.mouseY = mouseY
 
-		this.context.strokeStyle = "rgba(" + COLOR[0] + ", " + COLOR[1] + ", " + COLOR[2] + ", 0.05 )";		
-		
 		for (var i = 0; i < this.painters.length; i++)
 		{
 			this.painters[i].dx = mouseX;

@@ -37,13 +37,12 @@ sketchy.prototype =
 
 		this.points.push( [ mouseX, mouseY ] );
 
-		this.context.strokeStyle = "rgba(" + COLOR[0] + ", " + COLOR[1] + ", " + COLOR[2] + ", 0.05)";
+		this.context.strokeStyle = "rgba(" + COLOR[0] + ", " + COLOR[1] + ", " + COLOR[2] + ", " + 0.05 * BRUSH_PRESSURE + ")";
+
 		this.context.beginPath();
 		this.context.moveTo(this.prevMouseX, this.prevMouseY);
 		this.context.lineTo(mouseX, mouseY);
 		this.context.stroke();
-
-		this.context.strokeStyle = "rgba(" + COLOR[0] + ", " + COLOR[1] + ", " + COLOR[2] + ", 0.05 )";
 
 		for (i = 0; i < this.points.length; i++)
 		{
@@ -51,7 +50,7 @@ sketchy.prototype =
 			dy = this.points[i][1] - this.points[this.count][1];
 			d = dx * dx + dy * dy;
 
-			if (d < 4000 && Math.random() > d / 2000)
+			if (d < 4000 && Math.random() > (d / 2000))
 			{
 				this.context.beginPath();
 				this.context.moveTo( this.points[this.count][0] + (dx * 0.3), this.points[this.count][1] + (dy * 0.3));

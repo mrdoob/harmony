@@ -28,8 +28,6 @@ fur.prototype =
 	{
 		this.prevMouseX = mouseX;
 		this.prevMouseY = mouseY;
-		
-		this.context.strokeStyle = "rgba(" + COLOR[0] + ", " + COLOR[1] + ", " + COLOR[2] + ", 0.1)";		
 	},
 
 	stroke: function( mouseX, mouseY )
@@ -38,6 +36,8 @@ fur.prototype =
 
 		this.points.push( [ mouseX, mouseY ] );
 
+		this.context.strokeStyle = "rgba(" + COLOR[0] + ", " + COLOR[1] + ", " + COLOR[2] + ", " + 0.1 * BRUSH_PRESSURE + ")";
+		
 		this.context.beginPath();
 		this.context.moveTo(this.prevMouseX, this.prevMouseY);
 		this.context.lineTo(mouseX, mouseY);

@@ -1,6 +1,6 @@
-var REV = 4, USER_AGENT = navigator.userAgent.toLowerCase(), i,
-brush, BRUSHES = ["sketchy", "shaded", "chrome", "fur", "longfur", "web", "", "simple", "squares", "ribbon", "", "circles", "grid"],
-BRUSH_SIZE = 1, COLOR = [0, 0, 0], BACKGROUND_COLOR = [250, 250, 250],
+var REV = 4, USER_AGENT = navigator.userAgent.toLowerCase(), wacom,
+i, brush, BRUSHES = ["sketchy", "shaded", "chrome", "fur", "longfur", "web", "", "simple", "squares", "ribbon", "", "circles", "grid"],
+BRUSH_SIZE = 1, BRUSH_PRESSURE = 1, COLOR = [0, 0, 0], BACKGROUND_COLOR = [250, 250, 250],
 SCREEN_WIDTH = window.innerWidth,
 SCREEN_HEIGHT = window.innerHeight,
 mouseX = 0, mouseY = 0,
@@ -13,7 +13,7 @@ init();
 
 function init()
 {
-	var hash, palette;
+	var hash, palette, embed;
 	
 	if (USER_AGENT.search("androi") > -1 || USER_AGENT.search("iphone") > -1)
 		BRUSH_SIZE = 2;	
@@ -21,11 +21,20 @@ function init()
 	container = document.createElement('div');
 	document.body.appendChild(container);
 	
+	embed = document.createElement('embed');
+	embed.id = 'wacom-plugin';
+	embed.type = 'application/x-wacom-tablet';
+	document.body.appendChild(embed);
+	
+	wacom = document.embeds["wacom-plugin"];
+
 	canvas = document.createElement("canvas");
 	canvas.width = SCREEN_WIDTH;
 	canvas.height = SCREEN_HEIGHT;
 	canvas.style.cursor = 'crosshair';
 	container.appendChild(canvas);
+	
+	context = canvas.getContext("2d");
 	
 	flattenCanvas = document.createElement("canvas");
 	flattenCanvas.width = SCREEN_WIDTH;
@@ -59,8 +68,6 @@ function init()
 
 	foregroundColorSelector.setColor( COLOR );
 	backgroundColorSelector.setColor( BACKGROUND_COLOR );
-
-	context = canvas.getContext("2d");
 	
 	if (window.location.hash)
 	{
@@ -274,6 +281,8 @@ function onCanvasMouseDown( event )
 		return;
 	}
 	
+	BRUSH_PRESSURE = wacom.isWacom ? wacom.pressure : 1;
+	
 	brush.strokeStart( event.clientX, event.clientY );
 
 	window.addEventListener('mousemove', onCanvasMouseMove, false);
@@ -282,6 +291,8 @@ function onCanvasMouseDown( event )
 
 function onCanvasMouseMove( event )
 {
+	BRUSH_PRESSURE = wacom.isWacom ? wacom.pressure : 1;
+	
 	brush.stroke( event.clientX, event.clientY );
 }
 

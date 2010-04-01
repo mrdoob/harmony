@@ -22,7 +22,6 @@ grid.prototype =
 
 	strokeStart: function( mouseX, mouseY )
 	{
-		this.context.strokeStyle = "rgba(" + COLOR[0] + ", " + COLOR[1] + ", " + COLOR[2] + ", 0.01)";	
 	},
 
 	stroke: function( mouseX, mouseY )
@@ -34,6 +33,8 @@ grid.prototype =
 		
 		dx = (cx - mouseX) * 10;
 		dy = (cy - mouseY) * 10;
+		
+		this.context.strokeStyle = "rgba(" + COLOR[0] + ", " + COLOR[1] + ", " + COLOR[2] + ", " + 0.01 * BRUSH_PRESSURE + ")";		
 
 		for (i = 0; i < 50; i++)
 		{

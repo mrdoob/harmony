@@ -24,12 +24,12 @@ simple.prototype =
 	{
 		this.prevMouseX = mouseX;
 		this.prevMouseY = mouseY;
-		
-		this.context.strokeStyle = "rgba(" + COLOR[0] + ", " + COLOR[1] + ", " + COLOR[2] + ", 0.5)";		
 	},
 
 	stroke: function( mouseX, mouseY )
 	{
+		this.context.strokeStyle = "rgba(" + COLOR[0] + ", " + COLOR[1] + ", " + COLOR[2] + ", " + 0.5 * BRUSH_PRESSURE + ")";
+		
 		this.context.beginPath();
 		this.context.moveTo(this.prevMouseX, this.prevMouseY);
 		this.context.lineTo(mouseX, mouseY);
