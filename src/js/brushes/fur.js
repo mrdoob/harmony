@@ -14,7 +14,6 @@ fur.prototype =
 	init: function( context )
 	{
 		this.context = context;
-		this.context.lineWidth = BRUSH_SIZE;
 
 		this.points = new Array();
 		this.count = 0;
@@ -36,6 +35,7 @@ fur.prototype =
 
 		this.points.push( [ mouseX, mouseY ] );
 
+		this.context.lineWidth = BRUSH_SIZE;
 		this.context.strokeStyle = "rgba(" + COLOR[0] + ", " + COLOR[1] + ", " + COLOR[2] + ", " + 0.1 * BRUSH_PRESSURE + ")";
 		
 		this.context.beginPath();

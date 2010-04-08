@@ -10,7 +10,6 @@ grid.prototype =
 	init: function( context )
 	{
 		this.context = context;
-		this.context.lineWidth = BRUSH_SIZE;
 
 		if (RegExp(" AppleWebKit/").test(navigator.userAgent))
 			this.context.globalCompositeOperation = 'darker';
@@ -34,6 +33,7 @@ grid.prototype =
 		dx = (cx - mouseX) * 10;
 		dy = (cy - mouseY) * 10;
 		
+		this.context.lineWidth = BRUSH_SIZE;		
 		this.context.strokeStyle = "rgba(" + COLOR[0] + ", " + COLOR[1] + ", " + COLOR[2] + ", " + 0.01 * BRUSH_PRESSURE + ")";		
 
 		for (i = 0; i < 50; i++)

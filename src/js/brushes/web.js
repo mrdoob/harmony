@@ -14,7 +14,6 @@ web.prototype =
 	init: function( context )
 	{
 		this.context = context;
-		this.context.lineWidth = BRUSH_SIZE;
 		this.context.globalCompositeOperation = 'source-over';
 
 		this.points = new Array();
@@ -37,6 +36,7 @@ web.prototype =
 
 		this.points.push( [ mouseX, mouseY ] );
 
+		this.context.lineWidth = BRUSH_SIZE;
 		this.context.strokeStyle = "rgba(" + COLOR[0] + ", " + COLOR[1] + ", " + COLOR[2] + ", " + 0.5 * BRUSH_PRESSURE + ")";
 		this.context.beginPath();
 		this.context.moveTo(this.prevMouseX, this.prevMouseY);

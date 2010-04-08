@@ -18,7 +18,6 @@ ribbon.prototype =
 		var scope = this;
 		
 		this.context = context;
-		this.context.lineWidth = BRUSH_SIZE;
 		this.context.globalCompositeOperation = 'source-over';
 
 		this.mouseX = SCREEN_WIDTH / 2;
@@ -37,6 +36,7 @@ ribbon.prototype =
 		{
 			var i;
 			
+			this.context.lineWidth = BRUSH_SIZE;			
 			this.context.strokeStyle = "rgba(" + COLOR[0] + ", " + COLOR[1] + ", " + COLOR[2] + ", " + 0.05 * BRUSH_PRESSURE + ")";
 			
 			for (i = 0; i < scope.painters.length; i++)

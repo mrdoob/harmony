@@ -13,7 +13,6 @@ squares.prototype =
 	{
 		this.context = context;
 		this.context.globalCompositeOperation = 'source-over';
-		this.context.lineWidth = BRUSH_SIZE;
 	},
 
 	destroy: function()
@@ -36,6 +35,7 @@ squares.prototype =
 		px = Math.cos(angle) * dx - Math.sin(angle) * dy;
 		py = Math.sin(angle) * dx + Math.cos(angle) * dy;
 
+		this.context.lineWidth = BRUSH_SIZE;
 		this.context.fillStyle = "rgba(" + BACKGROUND_COLOR[0] + ", " + BACKGROUND_COLOR[1] + ", " + BACKGROUND_COLOR[2] + ", " + BRUSH_PRESSURE + ")";
 		this.context.strokeStyle = "rgba(" + COLOR[0] + ", " + COLOR[1] + ", " + COLOR[2] + ", " + BRUSH_PRESSURE + ")";
 		

@@ -1,4 +1,4 @@
-var REV = 4, USER_AGENT = navigator.userAgent.toLowerCase(), wacom,
+var REV = 5, USER_AGENT = navigator.userAgent.toLowerCase(), wacom,
 i, brush, BRUSHES = ["sketchy", "shaded", "chrome", "fur", "longfur", "web", "", "simple", "squares", "ribbon", "", "circles", "grid"],
 BRUSH_SIZE = 1, BRUSH_PRESSURE = 1, COLOR = [0, 0, 0], BACKGROUND_COLOR = [250, 250, 250],
 SCREEN_WIDTH = window.innerWidth,
@@ -35,6 +35,7 @@ function init()
 	container.appendChild(canvas);
 	
 	context = canvas.getContext("2d");
+	context.lineCap = 'round';
 	
 	flattenCanvas = document.createElement("canvas");
 	flattenCanvas.width = SCREEN_WIDTH;
@@ -148,9 +149,11 @@ function onDocumentKeyDown( event )
 			foregroundColorSelector.container.style.top = mouseY - 125 + 'px';
 			foregroundColorSelector.container.style.visibility = 'visible';
 			break;
+			
 		case 18: // Alt
 			altKeyIsDown = true;
 			break;
+			
 		case 82: // r
 			brush.destroy();
 			brush = eval("new " + BRUSHES[menu.selector.selectedIndex] + "(context)");
@@ -166,9 +169,19 @@ function onDocumentKeyUp( event )
 			shiftKeyIsDown = false;
 			foregroundColorSelector.container.style.visibility = 'hidden';			
 			break;
+			
 		case 18: // Alt
 			altKeyIsDown = false;
-			break;	
+			break;
+			
+		case 219: // [
+			if(BRUSH_SIZE > 0) BRUSH_SIZE --;
+			break;
+		
+		case 221: // ]
+			BRUSH_SIZE ++;
+			break;
+			
 	}
 }
 

@@ -14,7 +14,6 @@ shaded.prototype =
 	init: function( context )
 	{
 		this.context = context;
-		this.context.lineWidth = BRUSH_SIZE;
 		this.context.globalCompositeOperation = 'source-over';
 
 		this.points = new Array();
@@ -36,6 +35,8 @@ shaded.prototype =
 		var i, dx, dy, d;
 
 		this.points.push( [ mouseX, mouseY ] );
+		
+		this.context.lineWidth = BRUSH_SIZE;
 
 		for (i = 0; i < this.points.length; i++)
 		{

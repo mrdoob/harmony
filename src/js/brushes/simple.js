@@ -13,7 +13,6 @@ simple.prototype =
 	{
 		this.context = context;
 		this.context.globalCompositeOperation = 'source-over';
-		this.context.lineWidth = BRUSH_SIZE;
 	},
 
 	destroy: function()
@@ -28,6 +27,7 @@ simple.prototype =
 
 	stroke: function( mouseX, mouseY )
 	{
+		this.context.lineWidth = BRUSH_SIZE;	
 		this.context.strokeStyle = "rgba(" + COLOR[0] + ", " + COLOR[1] + ", " + COLOR[2] + ", " + 0.5 * BRUSH_PRESSURE + ")";
 		
 		this.context.beginPath();

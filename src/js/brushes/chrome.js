@@ -14,7 +14,6 @@ chrome.prototype =
 	init: function( context )
 	{
 		this.context = context;
-		this.context.lineWidth = BRUSH_SIZE;
 		
 		if (RegExp(" AppleWebKit/").test(navigator.userAgent))
 			this.context.globalCompositeOperation = 'darker';
@@ -38,7 +37,8 @@ chrome.prototype =
 		var i, dx, dy, d;
 		
 		this.points.push( [ mouseX, mouseY ] );
-
+		
+		this.context.lineWidth = BRUSH_SIZE;
 		this.context.strokeStyle = "rgba(" + COLOR[0] + ", " + COLOR[1] + ", " + COLOR[2] + ", " + 0.1 * BRUSH_PRESSURE + ")";
 		this.context.beginPath();
 		this.context.moveTo(this.prevMouseX, this.prevMouseY);

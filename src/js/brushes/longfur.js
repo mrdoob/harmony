@@ -12,7 +12,6 @@ longfur.prototype =
 	init: function( context )
 	{
 		this.context = context;
-		this.context.lineWidth = BRUSH_SIZE;
 		this.context.globalCompositeOperation = 'source-over';
 		
 		this.points = new Array();
@@ -33,6 +32,7 @@ longfur.prototype =
 
 		this.points.push( [ mouseX, mouseY ] );
 		
+		this.context.lineWidth = BRUSH_SIZE;		
 		this.context.strokeStyle = "rgba(" + COLOR[0] + ", " + COLOR[1] + ", " + COLOR[2] + ", " + 0.05 * BRUSH_PRESSURE + ")";
 
 		for (i = 0; i < this.points.length; i++)
