@@ -175,7 +175,7 @@ function onDocumentKeyUp( event )
 			break;
 			
 		case 219: // [
-			if(BRUSH_SIZE > 0) BRUSH_SIZE --;
+			if(BRUSH_SIZE > 1) BRUSH_SIZE --;
 			break;
 		
 		case 221: // ]
