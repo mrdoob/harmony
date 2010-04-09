@@ -173,11 +173,11 @@ function onDocumentKeyUp( event )
 			altKeyIsDown = false;
 			break;
 			
-		case 219: // [
+		case 68: // d
 			if(BRUSH_SIZE > 1) BRUSH_SIZE --;
 			break;
 		
-		case 221: // ]
+		case 70: // f
 			BRUSH_SIZE ++;
 			break;			
 	}
