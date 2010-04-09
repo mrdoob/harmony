@@ -35,7 +35,6 @@ function init()
 	container.appendChild(canvas);
 	
 	context = canvas.getContext("2d");
-	context.lineCap = 'round';
 	
 	flattenCanvas = document.createElement("canvas");
 	flattenCanvas.width = SCREEN_WIDTH;
@@ -180,9 +179,10 @@ function onDocumentKeyUp( event )
 		
 		case 221: // ]
 			BRUSH_SIZE ++;
-			break;
-			
+			break;			
 	}
+	
+	context.lineCap = BRUSH_SIZE == 1 ? 'butt' : 'round';	
 }
 
 
