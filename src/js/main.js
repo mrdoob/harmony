@@ -1,9 +1,7 @@
-var REV = 5, USER_AGENT = navigator.userAgent.toLowerCase(), wacom,
-i, brush, BRUSHES = ["sketchy", "shaded", "chrome", "fur", "longfur", "web", "", "simple", "squares", "ribbon", "", "circles", "grid"],
+var REV = 6, BRUSHES = ["sketchy", "shaded", "chrome", "fur", "longfur", "web", "", "simple", "squares", "ribbon", "", "circles", "grid"], SCREEN_WIDTH = window.innerWidth, SCREEN_HEIGHT = window.innerHeight,
 BRUSH_SIZE = 1, BRUSH_PRESSURE = 1, COLOR = [0, 0, 0], BACKGROUND_COLOR = [250, 250, 250],
-SCREEN_WIDTH = window.innerWidth,
-SCREEN_HEIGHT = window.innerHeight,
-mouseX = 0, mouseY = 0,
+USER_AGENT = navigator.userAgent.toLowerCase(), STORAGE = window.localStorage,
+brush, saveTimeOut, wacom, i, mouseX = 0, mouseY = 0,
 container, foregroundColorSelector, backgroundColorSelector, menu, about,
 canvas, flattenCanvas, context,
 isFgColorSelectorVisible = false, isBgColorSelectorVisible = false, isAboutVisible = false,
@@ -13,10 +11,13 @@ init();
 
 function init()
 {
-	var hash, palette, embed;
+	var hash, palette, embed, localStorageImage;
 	
-	if (USER_AGENT.search("androi") > -1 || USER_AGENT.search("iphone") > -1)
+	if (USER_AGENT.search("android") > -1 || USER_AGENT.search("iphone") > -1)
 		BRUSH_SIZE = 2;	
+		
+	if (USER_AGENT.search("safari") > -1 && USER_AGENT.search("chrome") == -1) // Safari
+		STORAGE = false;
 	
 	container = document.createElement('div');
 	document.body.appendChild(container);
@@ -24,6 +25,7 @@ function init()
 	embed = document.createElement('embed');
 	embed.id = 'wacom-plugin';
 	embed.type = 'application/x-wacom-tablet';
+	// embed.style.display = 'none';
 	document.body.appendChild(embed);
 	
 	wacom = document.embeds["wacom-plugin"];
@@ -65,6 +67,34 @@ function init()
 	menu.container.onmouseover = onMenuMouseOver;
 	menu.container.onmouseout = onMenuMouseOut;
 	container.appendChild(menu.container);
+
+	if (STORAGE)
+	{
+		if (localStorage.canvas)
+		{
+			localStorageImage = new Image();
+			localStorageImage.src = localStorage.canvas;
+		
+			localStorageImage.onload = function()
+			{
+				context.drawImage(localStorageImage,0,0);
+			}
+		}
+		
+		if (localStorage.brush_color_red)
+		{
+			COLOR[0] = localStorage.brush_color_red;
+			COLOR[1] = localStorage.brush_color_green;
+			COLOR[2] = localStorage.brush_color_blue;
+		}
+
+		if (localStorage.background_color_red)
+		{
+			BACKGROUND_COLOR[0] = localStorage.background_color_red;
+			BACKGROUND_COLOR[1] = localStorage.background_color_green;
+			BACKGROUND_COLOR[2] = localStorage.background_color_blue;
+		}
+	}
 
 	foregroundColorSelector.setColor( COLOR );
 	backgroundColorSelector.setColor( BACKGROUND_COLOR );
@@ -191,15 +221,31 @@ function onDocumentKeyUp( event )
 function onForegroundColorSelectorChange( event )
 {
 	COLOR = foregroundColorSelector.getColor();
+	
 	menu.setForegroundColor( COLOR );
+
+	if (STORAGE)
+	{
+		localStorage.brush_color_red = COLOR[0];
+		localStorage.brush_color_green = COLOR[1];
+		localStorage.brush_color_blue = COLOR[2];		
+	}
 }
 
 function onBackgroundColorSelectorChange( event )
 {
 	BACKGROUND_COLOR = backgroundColorSelector.getColor();
+	
 	menu.setBackgroundColor( BACKGROUND_COLOR );
 	
-	document.body.style.backgroundColor = 'rgb(' + BACKGROUND_COLOR[0] + ', ' + BACKGROUND_COLOR[1] + ', ' + BACKGROUND_COLOR[2] + ')';	
+	document.body.style.backgroundColor = 'rgb(' + BACKGROUND_COLOR[0] + ', ' + BACKGROUND_COLOR[1] + ', ' + BACKGROUND_COLOR[2] + ')';
+	
+	if (STORAGE)
+	{
+		localStorage.background_color_red = BACKGROUND_COLOR[0];
+		localStorage.background_color_green = BACKGROUND_COLOR[1];
+		localStorage.background_color_blue = BACKGROUND_COLOR[2];				
+	}
 }
 
 
@@ -211,7 +257,7 @@ function onMenuForegroundColor()
 	
 	foregroundColorSelector.show();
 	foregroundColorSelector.container.style.left = ((SCREEN_WIDTH - foregroundColorSelector.container.offsetWidth) / 2) + 'px';
-	foregroundColorSelector.container.style.top = ((SCREEN_HEIGHT - foregroundColorSelector.container.offsetHeight) / 2) + 'px';
+	foregroundColorSelector.container.style.top = ((SCREEN_HEIGHT - foregroundColorSelector.container.offsetattributesHeight) / 2) + 'px';
 
 	isFgColorSelectorVisible = true;
 }
@@ -250,8 +296,9 @@ function onMenuMouseOut()
 
 function onMenuSave()
 {
+	// window.open(canvas.toDataURL('image/png'),'mywindow');
 	flatten();
-	window.open(flattenCanvas.toDataURL("image/png"),'mywindow');
+	window.open(flattenCanvas.toDataURL('image/png'),'mywindow');
 }
 
 function onMenuClear()
@@ -260,6 +307,8 @@ function onMenuClear()
 		return;
 		
 	context.clearRect(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
+
+	saveToLocalStorage();
 
 	brush.destroy();
 	brush = eval("new " + BRUSHES[menu.selector.selectedIndex] + "(context)");
@@ -280,6 +329,7 @@ function onCanvasMouseDown( event )
 {
 	var data, position;
 
+	clearTimeout(saveTimeOut);
 	cleanPopUps();
 	
 	if (altKeyIsDown)
@@ -313,8 +363,14 @@ function onCanvasMouseUp()
 {
 	brush.strokeEnd();
 	
-	window.removeEventListener('mousemove', onCanvasMouseMove, false);	
+	window.removeEventListener('mousemove', onCanvasMouseMove, false);
 	window.removeEventListener('mouseup', onCanvasMouseUp, false);
+	
+	if (STORAGE)
+	{
+		clearTimeout(saveTimeOut);
+		saveTimeOut = setTimeout(saveToLocalStorage, 2000, true);
+	}
 }
 
 
@@ -358,6 +414,11 @@ function onCanvasTouchEnd( event )
 }
 
 //
+
+function saveToLocalStorage()
+{
+	localStorage.canvas = canvas.toDataURL('image/png');
+}
 
 function flatten()
 {
