@@ -44,13 +44,16 @@ function init()
 	
 	container = document.createElement('div');
 	document.body.appendChild(container);
-	
+
+	/*
+	// disabling this until I come up with a silent way to handle it
 	embed = document.createElement('embed');
 	embed.id = 'wacom-plugin';
 	embed.type = 'application/x-wacom-tablet';
 	document.body.appendChild(embed);
 	
 	wacom = document.embeds["wacom-plugin"];
+	*/
 
 	canvas = document.createElement("canvas");
 	canvas.width = SCREEN_WIDTH;
@@ -146,11 +149,12 @@ function init()
 	
 	window.addEventListener('mousemove', onWindowMouseMove, false);
 	window.addEventListener('resize', onWindowResize, false);
-	window.addEventListener('keydown', onDocumentKeyDown, false);
-	window.addEventListener('keyup', onDocumentKeyUp, false);
+	window.addEventListener('keydown', onWindowKeyDown, false);
+	window.addEventListener('keyup', onWindowKeyUp, false);
+	window.addEventListener('blur', onWindowBlur, false);
 	
 	document.addEventListener('mousedown', onDocumentMouseDown, false);
-	document.addEventListener('mouseout', onCanvasMouseUp, false);
+	document.addEventListener('mouseout', onDocumentMouseOut, false);
 	
 	canvas.addEventListener('mousedown', onCanvasMouseDown, false);
 	canvas.addEventListener('touchstart', onCanvasTouchStart, false);
@@ -178,16 +182,7 @@ function onWindowResize()
 	about.container.style.top = ((SCREEN_HEIGHT - about.container.offsetHeight) / 2) + 'px';
 }
 
-
-// DOCUMENT
-
-function onDocumentMouseDown( event )
-{
-	if (!isMenuMouseOver)
-		event.preventDefault();
-}
-
-function onDocumentKeyDown( event )
+function onWindowKeyDown( event )
 {
 	if (shiftKeyIsDown)
 		return;
@@ -212,7 +207,7 @@ function onDocumentKeyDown( event )
 	}
 }
 
-function onDocumentKeyUp( event )
+function onWindowKeyUp( event )
 {
 	switch(event.keyCode)
 	{
@@ -235,6 +230,26 @@ function onDocumentKeyUp( event )
 	}
 	
 	context.lineCap = BRUSH_SIZE == 1 ? 'butt' : 'round';	
+}
+
+function onWindowBlur( event )
+{
+	shiftKeyIsDown = false;
+	altKeyIsDown = false;
+}
+
+
+// DOCUMENT
+
+function onDocumentMouseDown( event )
+{
+	if (!isMenuMouseOver)
+		event.preventDefault();
+}
+
+function onDocumentMouseOut( event )
+{
+	onCanvasMouseUp();
 }
 
 
@@ -366,7 +381,7 @@ function onCanvasMouseDown( event )
 		return;
 	}
 	
-	BRUSH_PRESSURE = wacom.isWacom ? wacom.pressure : 1;
+	BRUSH_PRESSURE = wacom && wacom.isWacom ? wacom.pressure : 1;
 	
 	brush.strokeStart( event.clientX, event.clientY );
 
@@ -376,7 +391,7 @@ function onCanvasMouseDown( event )
 
 function onCanvasMouseMove( event )
 {
-	BRUSH_PRESSURE = wacom.isWacom ? wacom.pressure : 1;
+	BRUSH_PRESSURE = wacom && wacom.isWacom ? wacom.pressure : 1;
 	
 	brush.stroke( event.clientX, event.clientY );
 }
