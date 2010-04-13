@@ -1,11 +1,34 @@
-var REV = 6, BRUSHES = ["sketchy", "shaded", "chrome", "fur", "longfur", "web", "", "simple", "squares", "ribbon", "", "circles", "grid"], SCREEN_WIDTH = window.innerWidth, SCREEN_HEIGHT = window.innerHeight,
-BRUSH_SIZE = 1, BRUSH_PRESSURE = 1, COLOR = [0, 0, 0], BACKGROUND_COLOR = [250, 250, 250],
-USER_AGENT = navigator.userAgent.toLowerCase(), STORAGE = window.localStorage,
-brush, saveTimeOut, wacom, i, mouseX = 0, mouseY = 0,
-container, foregroundColorSelector, backgroundColorSelector, menu, about,
-canvas, flattenCanvas, context,
-isFgColorSelectorVisible = false, isBgColorSelectorVisible = false, isAboutVisible = false,
-isMenuMouseOver = false, shiftKeyIsDown = false, altKeyIsDown = false;
+var REV = 6,
+    BRUSHES = ["sketchy", "shaded", "chrome", "fur", "longfur", "web", "", "simple", "squares", "ribbon", "", "circles", "grid"],
+    SCREEN_WIDTH = window.innerWidth,
+    SCREEN_HEIGHT = window.innerHeight,
+    BRUSH_SIZE = 1,
+    BRUSH_PRESSURE = 1,
+    COLOR = [0, 0, 0],
+    BACKGROUND_COLOR = [250, 250, 250],
+    STORAGE = window.localStorage,
+    brush,
+    saveTimeOut,
+    wacom,
+    i,
+    mouseX = 0,
+    mouseY = 0,
+    container,
+    foregroundColorSelector,
+    backgroundColorSelector,
+    menu,
+    about,
+    canvas,
+    flattenCanvas,
+    context,
+    isFgColorSelectorVisible = false,
+    isBgColorSelectorVisible = false,
+    isAboutVisible = false,
+    isMenuMouseOver = false,
+    shiftKeyIsDown = false,
+    altKeyIsDown = false;
+
+const USER_AGENT = navigator.userAgent.toLowerCase();
 
 init();
 
@@ -25,7 +48,6 @@ function init()
 	embed = document.createElement('embed');
 	embed.id = 'wacom-plugin';
 	embed.type = 'application/x-wacom-tablet';
-	// embed.style.display = 'none';
 	document.body.appendChild(embed);
 	
 	wacom = document.embeds["wacom-plugin"];
@@ -257,7 +279,7 @@ function onMenuForegroundColor()
 	
 	foregroundColorSelector.show();
 	foregroundColorSelector.container.style.left = ((SCREEN_WIDTH - foregroundColorSelector.container.offsetWidth) / 2) + 'px';
-	foregroundColorSelector.container.style.top = ((SCREEN_HEIGHT - foregroundColorSelector.container.offsetattributesHeight) / 2) + 'px';
+	foregroundColorSelector.container.style.top = ((SCREEN_HEIGHT - foregroundColorSelector.container.offsetHeight) / 2) + 'px';
 
 	isFgColorSelectorVisible = true;
 }
