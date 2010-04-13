@@ -1,6 +1,8 @@
-var REV = 6,
-    BRUSHES = ["sketchy", "shaded", "chrome", "fur", "longfur", "web", "", "simple", "squares", "ribbon", "", "circles", "grid"],
-    SCREEN_WIDTH = window.innerWidth,
+const REV = 6,
+       BRUSHES = ["sketchy", "shaded", "chrome", "fur", "longfur", "web", "", "simple", "squares", "ribbon", "", "circles", "grid"],
+       USER_AGENT = navigator.userAgent.toLowerCase();
+
+var SCREEN_WIDTH = window.innerWidth,
     SCREEN_HEIGHT = window.innerHeight,
     BRUSH_SIZE = 1,
     BRUSH_PRESSURE = 1,
@@ -27,8 +29,6 @@ var REV = 6,
     isMenuMouseOver = false,
     shiftKeyIsDown = false,
     altKeyIsDown = false;
-
-const USER_AGENT = navigator.userAgent.toLowerCase();
 
 init();
 
