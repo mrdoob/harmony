@@ -34,7 +34,7 @@ About.prototype =
 
 		text = document.createElement("p");
 		text.style.textAlign = 'center';
-		text.innerHTML = '<a href="http://github.com/mrdoob/harmony" target="_blank">Source Code</a>';
+		text.innerHTML = '<a href="http://mrdoob.com/blog/post/689" target="_blank">Info</a> - <a href="http://github.com/mrdoob/harmony" target="_blank">Source Code</a>';
 		containerText.appendChild(text);
 
 		text = document.createElement("hr");

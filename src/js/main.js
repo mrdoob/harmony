@@ -82,15 +82,15 @@ function init()
 	menu.foregroundColor.addEventListener('touchend', onMenuForegroundColor, false);
 	menu.backgroundColor.addEventListener('click', onMenuBackgroundColor, false);
 	menu.backgroundColor.addEventListener('touchend', onMenuBackgroundColor, false);
-	menu.selector.onchange = onMenuSelectorChange;
+	menu.selector.addEventListener('change', onMenuSelectorChange, false);
 	menu.save.addEventListener('click', onMenuSave, false);
 	menu.save.addEventListener('touchend', onMenuSave, false);
 	menu.clear.addEventListener('click', onMenuClear, false);
 	menu.clear.addEventListener('touchend', onMenuClear, false);
 	menu.about.addEventListener('click', onMenuAbout, false);
 	menu.about.addEventListener('touchend', onMenuAbout, false);
-	menu.container.onmouseover = onMenuMouseOver;
-	menu.container.onmouseout = onMenuMouseOut;
+	menu.container.addEventListener('mouseover', onMenuMouseOver, false);
+	menu.container.addEventListener('mouseout', onMenuMouseOut, false);
 	container.appendChild(menu.container);
 
 	if (STORAGE)
@@ -98,12 +98,14 @@ function init()
 		if (localStorage.canvas)
 		{
 			localStorageImage = new Image();
-			localStorageImage.src = localStorage.canvas;
 		
-			localStorageImage.onload = function()
+			localStorageImage.addEventListener("load", function(event)
 			{
+				localStorageImage.removeEventListener(event.type, arguments.callee, false);
 				context.drawImage(localStorageImage,0,0);
-			}
+			}, false);
+			
+			localStorageImage.src = localStorage.canvas;			
 		}
 		
 		if (localStorage.brush_color_red)
@@ -200,10 +202,13 @@ function onWindowKeyDown( event )
 			altKeyIsDown = true;
 			break;
 			
-		case 82: // r
-			brush.destroy();
-			brush = eval("new " + BRUSHES[menu.selector.selectedIndex] + "(context)");
+		case 68: // d
+			if(BRUSH_SIZE > 1) BRUSH_SIZE --;
 			break;
+		
+		case 70: // f
+			BRUSH_SIZE ++;
+			break;			
 	}
 }
 
@@ -219,14 +224,11 @@ function onWindowKeyUp( event )
 		case 18: // Alt
 			altKeyIsDown = false;
 			break;
-			
-		case 68: // d
-			if(BRUSH_SIZE > 1) BRUSH_SIZE --;
+
+		case 82: // r
+			brush.destroy();
+			brush = eval("new " + BRUSHES[menu.selector.selectedIndex] + "(context)");
 			break;
-		
-		case 70: // f
-			BRUSH_SIZE ++;
-			break;			
 	}
 	
 	context.lineCap = BRUSH_SIZE == 1 ? 'butt' : 'round';	
