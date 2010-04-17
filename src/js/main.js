@@ -42,18 +42,23 @@ function init()
 	if (USER_AGENT.search("safari") > -1 && USER_AGENT.search("chrome") == -1) // Safari
 		STORAGE = false;
 	
+	document.body.style.backgroundRepeat = 'no-repeat';
+	document.body.style.backgroundPosition = 'center center';	
+	
 	container = document.createElement('div');
 	document.body.appendChild(container);
 
 	/*
-	// disabling this until I come up with a silent way to handle it
-	embed = document.createElement('embed');
-	embed.id = 'wacom-plugin';
-	embed.type = 'application/x-wacom-tablet';
-	document.body.appendChild(embed);
-	
-	wacom = document.embeds["wacom-plugin"];
-	*/
+	 * TODO: In some browsers a naste "Plugin Missing" window appears and people is getting confused.
+	 * Disabling it until a better way to handle it appears.
+	 * 
+	 * embed = document.createElement('embed');
+	 * embed.id = 'wacom-plugin';
+	 * embed.type = 'application/x-wacom-tablet';
+	 * document.body.appendChild(embed);
+	 *
+	 * wacom = document.embeds["wacom-plugin"];
+	 */
 
 	canvas = document.createElement("canvas");
 	canvas.width = SCREEN_WIDTH;
@@ -158,6 +163,10 @@ function init()
 	document.addEventListener('mousedown', onDocumentMouseDown, false);
 	document.addEventListener('mouseout', onDocumentMouseOut, false);
 	
+	document.addEventListener("dragenter", onDocumentDragEnter, false);  
+	document.addEventListener("dragover", onDocumentDragOver, false);
+	document.addEventListener("drop", onDocumentDrop, false);  
+	
 	canvas.addEventListener('mousedown', onCanvasMouseDown, false);
 	canvas.addEventListener('touchstart', onCanvasTouchStart, false);
 	
@@ -229,6 +238,9 @@ function onWindowKeyUp( event )
 			brush.destroy();
 			brush = eval("new " + BRUSHES[menu.selector.selectedIndex] + "(context)");
 			break;
+		case 66: // b
+			document.body.style.backgroundImage = null;
+			break;
 	}
 	
 	context.lineCap = BRUSH_SIZE == 1 ? 'butt' : 'round';	
@@ -252,6 +264,37 @@ function onDocumentMouseDown( event )
 function onDocumentMouseOut( event )
 {
 	onCanvasMouseUp();
+}
+
+function onDocumentDragEnter( event )
+{
+	event.stopPropagation();
+	event.preventDefault();
+}
+
+function onDocumentDragOver( event )
+{
+	event.stopPropagation();
+	event.preventDefault();
+}
+
+function onDocumentDrop( event )
+{
+	event.stopPropagation();  
+	event.preventDefault();
+	
+	var file = event.dataTransfer.files[0];
+	
+	if (file.type.match(/image.*/))
+	{
+		/*
+		 * TODO: This seems to work on Chromium. But not on Firefox.
+		 * Better wait for proper FileAPI?
+		 */
+
+		var fileString = event.dataTransfer.getData('text').split("\n");
+		document.body.style.backgroundImage = 'url(' + fileString[0] + ')';
+	}	
 }
 
 
