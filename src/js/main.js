@@ -4,6 +4,7 @@ const REV = 6,
 
 var SCREEN_WIDTH = window.innerWidth,
     SCREEN_HEIGHT = window.innerHeight,
+	PIXEL_RATIO = Math.max( 1, window.devicePixelRatio ),
     BRUSH_SIZE = 1,
     BRUSH_PRESSURE = 1,
     COLOR = [0, 0, 0],
@@ -61,16 +62,18 @@ function init()
 	 */
 
 	canvas = document.createElement("canvas");
-	canvas.width = SCREEN_WIDTH;
-	canvas.height = SCREEN_HEIGHT;
+	canvas.width = SCREEN_WIDTH * PIXEL_RATIO;
+	canvas.height = SCREEN_HEIGHT * PIXEL_RATIO;
 	canvas.style.cursor = 'crosshair';
+	canvas.style.width = SCREEN_WIDTH + 'px';
+	canvas.style.height = SCREEN_HEIGHT + 'px';
 	container.appendChild(canvas);
 	
 	context = canvas.getContext("2d");
 	
 	flattenCanvas = document.createElement("canvas");
-	flattenCanvas.width = SCREEN_WIDTH;
-	flattenCanvas.height = SCREEN_HEIGHT;
+	flattenCanvas.width = SCREEN_WIDTH * PIXEL_RATIO;
+	flattenCanvas.height = SCREEN_HEIGHT * PIXEL_RATIO;
 	
 	palette = new Palette();
 	
@@ -388,7 +391,7 @@ function onMenuClear()
 	if (!confirm("Are you sure?"))
 		return;
 		
-	context.clearRect(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
+	context.clearRect(0, 0, SCREEN_WIDTH * PIXEL_RATIO, SCREEN_HEIGHT * PIXEL_RATIO);
 
 	saveToLocalStorage();
 
@@ -428,7 +431,7 @@ function onCanvasMouseDown( event )
 	
 	BRUSH_PRESSURE = wacom && wacom.isWacom ? wacom.pressure : 1;
 	
-	brush.strokeStart( event.clientX, event.clientY );
+	brush.strokeStart( event.clientX * PIXEL_RATIO, event.clientY * PIXEL_RATIO );
 
 	window.addEventListener('mousemove', onCanvasMouseMove, false);
 	window.addEventListener('mouseup', onCanvasMouseUp, false);
@@ -438,7 +441,7 @@ function onCanvasMouseMove( event )
 {
 	BRUSH_PRESSURE = wacom && wacom.isWacom ? wacom.pressure : 1;
 	
-	brush.stroke( event.clientX, event.clientY );
+	brush.stroke( event.clientX * PIXEL_RATIO, event.clientY * PIXEL_RATIO );
 }
 
 function onCanvasMouseUp()
