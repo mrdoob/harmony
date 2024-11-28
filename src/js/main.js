@@ -70,6 +70,7 @@ function init()
 	container.appendChild(canvas);
 
 	context = canvas.getContext("2d");
+	context.save();
 	context.scale(PIXEL_RATIO, PIXEL_RATIO);
 
 	flattenCanvas = document.createElement("canvas");
@@ -111,7 +112,9 @@ function init()
 			localStorageImage.addEventListener("load", function(event)
 			{
 				localStorageImage.removeEventListener(event.type, arguments.callee, false);
+				context.restore();
 				context.drawImage(localStorageImage,0,0);
+				context.scale(PIXEL_RATIO, PIXEL_RATIO);
 			}, false);
 
 			localStorageImage.src = localStorage.canvas;
