@@ -70,6 +70,7 @@ function init()
 	container.appendChild(canvas);
 	
 	context = canvas.getContext("2d");
+	context.scale(PIXEL_RATIO, PIXEL_RATIO);
 	
 	flattenCanvas = document.createElement("canvas");
 	flattenCanvas.width = SCREEN_WIDTH * PIXEL_RATIO;
@@ -87,7 +88,7 @@ function init()
 	
 	menu = new Menu();
 	menu.foregroundColor.addEventListener('click', onMenuForegroundColor, false);
-	menu.foregroundColor.addEventListener('touchend', onMenuForegroundColor, false);
+	menu.foregroundColor.addEventListener('touchend', onMenuForegroundColor, { passive: false });
 	menu.backgroundColor.addEventListener('click', onMenuBackgroundColor, false);
 	menu.backgroundColor.addEventListener('touchend', onMenuBackgroundColor, false);
 	menu.selector.addEventListener('change', onMenuSelectorChange, false);
@@ -97,8 +98,8 @@ function init()
 	menu.clear.addEventListener('touchend', onMenuClear, false);
 	menu.about.addEventListener('click', onMenuAbout, false);
 	menu.about.addEventListener('touchend', onMenuAbout, false);
-	menu.container.addEventListener('mouseover', onMenuMouseOver, false);
-	menu.container.addEventListener('mouseout', onMenuMouseOut, false);
+	menu.container.addEventListener('mouseover', onMenuMouseOver, { passive: false });
+	menu.container.addEventListener('mouseout', onMenuMouseOut, { passive: false });
 	container.appendChild(menu.container);
 
 	if (STORAGE)
@@ -170,8 +171,8 @@ function init()
 	document.addEventListener("dragover", onDocumentDragOver, false);
 	document.addEventListener("drop", onDocumentDrop, false);  
 	
-	canvas.addEventListener('mousedown', onCanvasMouseDown, false);
-	canvas.addEventListener('touchstart', onCanvasTouchStart, false);
+	canvas.addEventListener('mousedown', onCanvasMouseDown, { passive: false });
+	canvas.addEventListener('touchstart', onCanvasTouchStart, { passive: false });
 	
 	onWindowResize(null);
 }
@@ -431,25 +432,25 @@ function onCanvasMouseDown( event )
 	
 	BRUSH_PRESSURE = wacom && wacom.isWacom ? wacom.pressure : 1;
 	
-	brush.strokeStart( event.clientX * PIXEL_RATIO, event.clientY * PIXEL_RATIO );
+	brush.strokeStart( event.clientX, event.clientY );
 
-	window.addEventListener('mousemove', onCanvasMouseMove, false);
-	window.addEventListener('mouseup', onCanvasMouseUp, false);
+	window.addEventListener('mousemove', onCanvasMouseMove, { passive: false });
+	window.addEventListener('mouseup', onCanvasMouseUp, { passive: false });
 }
 
 function onCanvasMouseMove( event )
 {
 	BRUSH_PRESSURE = wacom && wacom.isWacom ? wacom.pressure : 1;
 	
-	brush.stroke( event.clientX * PIXEL_RATIO, event.clientY * PIXEL_RATIO );
+	brush.stroke( event.clientX, event.clientY );
 }
 
 function onCanvasMouseUp()
 {
 	brush.strokeEnd();
 	
-	window.removeEventListener('mousemove', onCanvasMouseMove, false);
-	window.removeEventListener('mouseup', onCanvasMouseUp, false);
+	window.removeEventListener('mousemove', onCanvasMouseMove, { passive: false });
+	window.removeEventListener('mouseup', onCanvasMouseUp, { passive: false });
 	
 	if (STORAGE)
 	{
@@ -471,8 +472,8 @@ function onCanvasTouchStart( event )
 		
 		brush.strokeStart( event.touches[0].pageX, event.touches[0].pageY );
 		
-		window.addEventListener('touchmove', onCanvasTouchMove, false);
-		window.addEventListener('touchend', onCanvasTouchEnd, false);
+		window.addEventListener('touchmove', onCanvasTouchMove, { passive: false });
+		window.addEventListener('touchend', onCanvasTouchEnd, { passive: false });
 	}
 }
 
@@ -493,8 +494,8 @@ function onCanvasTouchEnd( event )
 		
 		brush.strokeEnd();
 
-		window.removeEventListener('touchmove', onCanvasTouchMove, false);
-		window.removeEventListener('touchend', onCanvasTouchEnd, false);
+		window.removeEventListener('touchmove', onCanvasTouchMove, { passive: false });
+		window.removeEventListener('touchend', onCanvasTouchEnd, { passive: false });
 	}
 }
 
