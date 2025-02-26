@@ -1,10 +1,10 @@
-const REV = 8,
-       BRUSHES = ["sketchy", "shaded", "chrome", "fur", "longfur", "web", "", "simple", "squares", "ribbon", "", "circles", "grid"],
-       USER_AGENT = navigator.userAgent.toLowerCase();
+const REV = 8;
+const BRUSHES = ["sketchy", "shaded", "chrome", "fur", "longfur", "web", "", "simple", "squares", "ribbon", "", "circles", "grid"];
+const USER_AGENT = navigator.userAgent.toLowerCase();
 
 var SCREEN_WIDTH = window.innerWidth,
     SCREEN_HEIGHT = window.innerHeight,
-	PIXEL_RATIO = Math.max( 1, window.devicePixelRatio ),
+    PIXEL_RATIO = Math.max( 1, window.devicePixelRatio ),
     BRUSH_SIZE = 1,
     BRUSH_PRESSURE = 1,
     COLOR = [0, 0, 0],
