@@ -105,7 +105,7 @@ function init()
 
 	if (STORAGE)
 	{
-		if (localStorage.canvas)
+		if (localStorage['harmony-canvas'])
 		{
 			localStorageImage = new Image();
 
@@ -117,21 +117,25 @@ function init()
 				context.scale(PIXEL_RATIO, PIXEL_RATIO);
 			}, false);
 
-			localStorageImage.src = localStorage.canvas;
+			localStorageImage.src = localStorage['harmony-canvas'];
 		}
 
-		if (localStorage.brush_color_red)
+		if (localStorage['harmony-bg'])
 		{
-			COLOR[0] = localStorage.brush_color_red;
-			COLOR[1] = localStorage.brush_color_green;
-			COLOR[2] = localStorage.brush_color_blue;
+			let array = JSON.parse(localStorage['harmony-color']);
+
+			COLOR[0] = array[0];
+			COLOR[1] = array[1];
+			COLOR[2] = array[2];
 		}
 
-		if (localStorage.background_color_red)
+		if (localStorage['harmony-bg'])
 		{
-			BACKGROUND_COLOR[0] = localStorage.background_color_red;
-			BACKGROUND_COLOR[1] = localStorage.background_color_green;
-			BACKGROUND_COLOR[2] = localStorage.background_color_blue;
+			let array = JSON.parse(localStorage['harmony-bg']);
+
+			BACKGROUND_COLOR[0] = array[0];
+			BACKGROUND_COLOR[1] = array[1];
+			BACKGROUND_COLOR[2] = array[2];
 		}
 	}
 
@@ -315,9 +319,7 @@ function onForegroundColorSelectorChange( event )
 
 	if (STORAGE)
 	{
-		localStorage.brush_color_red = COLOR[0];
-		localStorage.brush_color_green = COLOR[1];
-		localStorage.brush_color_blue = COLOR[2];
+		localStorage['harmony-color'] = JSON.stringify(COLOR);
 	}
 }
 
@@ -331,9 +333,7 @@ function onBackgroundColorSelectorChange( event )
 
 	if (STORAGE)
 	{
-		localStorage.background_color_red = BACKGROUND_COLOR[0];
-		localStorage.background_color_green = BACKGROUND_COLOR[1];
-		localStorage.background_color_blue = BACKGROUND_COLOR[2];
+		localStorage['harmony-bg'] = JSON.stringify(BACKGROUND_COLOR);
 	}
 }
 
@@ -506,7 +506,7 @@ function onCanvasTouchEnd( event )
 
 function saveToLocalStorage()
 {
-	localStorage.canvas = canvas.toDataURL('image/png');
+	localStorage['harmony-canvas'] = canvas.toDataURL('image/png');
 }
 
 function flatten()
