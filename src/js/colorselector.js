@@ -29,6 +29,7 @@ ColorSelector.prototype =
 		this.container.style.height = '250px';
 		this.container.style.visibility = 'hidden';
 		this.container.style.cursor = 'pointer';
+		this.container.style.clipPath = 'circle(50.0% at 50% 50%)';
 		this.container.addEventListener('mousedown', onMouseDown, false);
 		this.container.addEventListener('touchstart', onTouchStart, false);
 
