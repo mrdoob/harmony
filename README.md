@@ -1,4 +1,0 @@
-harmony
-=======
-
-#### Procedural Drawing Tool ####
