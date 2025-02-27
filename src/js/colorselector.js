@@ -57,6 +57,7 @@ ColorSelector.prototype =
 
 		context = this.luminosity.getContext("2d");
 		context.scale(DPR, DPR);
+		context.translate(250 / 2, 250 / 2);
 
 		this.container.appendChild(this.luminosity);
 
@@ -223,13 +224,13 @@ ColorSelector.prototype =
 	{
 		// Ok, this is super dirty. The whole class needs some refactoring, again! :/
 
-		var hsb, angle, distance, rgb, degreesToRadians = Math.PI / 180;
+		var hsb, angle, distance, rgb, DEG2RAD = Math.PI / 180;
 
 		this.color = color;
 
 		hsb = RGB2HSB(color[0] / 255, color[1] / 255, color[2] / 255);
 
-		angle = hsb[0] * degreesToRadians;
+		angle = hsb[0] * DEG2RAD;
 		distance = (hsb[1] / 100) * 90;
 
 		this.hueSelector.style.left = ( ( Math.cos(angle) * distance + 125 ) - 7 ) + 'px';
@@ -240,7 +241,7 @@ ColorSelector.prototype =
 
 		this.updateLuminosity( rgb[0], rgb[1], rgb[2] );
 
-		angle = (hsb[2] / 100) * 360 * degreesToRadians;
+		angle = (hsb[2] / 100) * 360 * DEG2RAD;
 
 		this.luminosityPosition[0] = ( Math.cos(angle) * 110 ) + 125;
 		this.luminosityPosition[1] = ( Math.sin(angle) * 110 ) + 125;
@@ -255,30 +256,27 @@ ColorSelector.prototype =
 
 	updateLuminosity: function( r, g, b )
 	{
-		var context, angle, angle_cos, angle_sin, shade, offsetx, offsety,
-		inner_radius = 100, outter_radius = 120, i, count = 1080 / 2, oneDivCount = 1 / count, degreesToRadians = Math.PI / 180,
-		countDiv360 = (count / 360);
-
-		offsetx = 250 / 2;
-		offsety = 250 / 2;
+		var context, angle, angle_cos, angle_sin, shade, radius = 110,
+		i, count = 360, DEG2RAD = Math.PI / 180;
 
 		context = this.luminosity.getContext("2d");
-		context.lineWidth = 3;
 		context.clearRect(0, 0, this.luminosity.width, this.luminosity.height);
+
+		const map = (value, x1, y1, x2, y2) => (value - x1) * (y2 - x2) / (y1 - x1) + x2;
 
 		for(i = 0; i < count; i++)
 		{
-			angle = i / countDiv360 * degreesToRadians;
+			angle = map( i, 0, count, 5, 355 ) * DEG2RAD;
 			angle_cos = Math.cos(angle);
 			angle_sin = Math.sin(angle);
 
-			shade = 255 - (i * oneDivCount /* / count */) * 255;
+			shade = i / count;
 
-			context.strokeStyle = "rgb(" + Math.floor( r - shade ) + "," + Math.floor( g - shade ) + "," + Math.floor( b - shade ) + ")";
+			context.fillStyle = "rgb(" + Math.floor( r * shade ) + "," + Math.floor( g * shade ) + "," + Math.floor( b * shade ) + ")";
 			context.beginPath();
-			context.moveTo(angle_cos * inner_radius + offsetx, angle_sin * inner_radius + offsety);
-			context.lineTo(angle_cos * outter_radius + offsetx, angle_sin * outter_radius + offsety);
-			context.stroke();
+			context.arc(angle_cos * radius, angle_sin * radius, 10, 0, Math.PI * 2);
+			context.fill();
+
 		}
 
 		this.luminosityData = context.getImageData(0, 0, this.luminosity.width, this.luminosity.height).data;

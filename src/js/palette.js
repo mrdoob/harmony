@@ -2,42 +2,35 @@ function Palette()
 {
 	const DPR = Math.round(window.devicePixelRatio);
 
-	var canvas, context, offsetx, offsety, radius = 90,
-	count = 1080, oneDivCount = 1 / count, countDiv360 = count / 360, degreesToRadians = Math.PI / 180,
-	i, angle, angle_cos, angle_sin, gradient;
+	var canvas, context, radius = 90, gradient;
 
 	canvas = document.createElement("canvas");
 	canvas.width = 250 * DPR;
 	canvas.height = 250 * DPR;
 
-	offsetx = 250 / 2;
-	offsety = 250 / 2;
-
 	context = canvas.getContext("2d");
 	context.scale(DPR, DPR);
-	context.lineWidth = 1;
 
-	// http://www.boostworthy.com/blog/?p=226
+	gradient = context.createConicGradient(0, 125, 125);
 
-	for(i = 0; i < count; i++)
+	for(hue = 0; hue < 360; hue++)
 	{
-		angle = i / countDiv360 * degreesToRadians;
-		angle_cos = Math.cos(angle);
-		angle_sin = Math.sin(angle);
-
-		context.strokeStyle = "hsl(" + Math.floor( (i * oneDivCount) * 360 ) + ", 100%, 50%)";
-		context.beginPath();
-		context.moveTo(angle_cos + offsetx, angle_sin + offsety);
-		context.lineTo(angle_cos * radius + offsetx, angle_sin * radius + offsety);
-		context.stroke();
+		gradient.addColorStop(hue / 360, 'hsl(' + hue + ', 100%, 50%)');
 	}
 
-	gradient = context.createRadialGradient(offsetx, offsetx, 0, offsetx, offsetx, radius);
+	context.beginPath();
+	context.arc(125, 125, radius, 0, Math.PI * 2);
+	context.fillStyle = gradient;
+	context.fill();
+
+	gradient = context.createRadialGradient(125, 125, 0, 125, 125, radius);
 	gradient.addColorStop(0, 'rgba(255, 255, 255, 1)');
 	gradient.addColorStop(1, 'rgba(255, 255, 255, 0)');
 
+	context.beginPath();
+	context.arc(125, 125, radius, 0, Math.PI * 2);
 	context.fillStyle = gradient;
-	context.fillRect(0, 0, canvas.width, canvas.height);
+	context.fill();
 
 	return canvas;
 }
