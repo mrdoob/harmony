@@ -1,0 +1,63 @@
+* rev. 9 - 2025 02 27
+
+- Improved color selector.
+
+
+* rev. 8 - 2024 11 28
+
+- Fixed device pixel ratio implementation. (@yunap)
+
+
+* rev. 7 - 2023 05 08
+
+- Implemented device pixel ratio.
+
+
+* rev. 6 - 2010 04 12
+
+- Drawing gets saved on the browser so it can be continued later.
+  Chrome bug: http://code.google.com/p/chromium/issues/detail?id=26456
+  Safari disabled: Flags as unsecure to copy from localStorage to canvas :(
+
+
+* rev. 5 - 2010 04 08
+
+- <d> and <f> increase/decrease brush size
+
+
+* rev. 4 - 2010 04 01
+
+- Increase brush size for high dpi devices (Android / iPhone OS)
+- Optimised Color Wheel generation
+- Wacom pressure support
+
+
+* rev. 3 - 2010 03 30
+
+- Color selector code clean up
+- Color picker with <alt>
+- Confirmation box before clearing.
+
+
+* rev. 2 - 2010 03 25
+
+- Reworked event system
+- Optimised colour palette code
+- Fixed mobile support
+- 'Chrome' brush colour support
+- Resets brush with <r> (Thanks Klaus Lyngeled)
+- Removed undefined call when clearing canvas
+
+
+* rev. 1 - 2010 03 15
+
+- New menu style
+- Foreground and background colour selector with <shift> (Thanks David Lasnier)
+- Added 'Simple' brush
+- Brushes colour support
+- About popup
+
+
+* rev. 0 - 2010 03 08
+
+- First version

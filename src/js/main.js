@@ -1,4 +1,4 @@
-const REV = 8;
+const REV = 9;
 const BRUSHES = ["sketchy", "shaded", "chrome", "fur", "longfur", "web", "", "simple", "squares", "ribbon", "", "circles", "grid"];
 const USER_AGENT = navigator.userAgent.toLowerCase();
 
