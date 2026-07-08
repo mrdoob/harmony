@@ -207,11 +207,20 @@ function onWindowResize()
 function onWindowKeyDown( event )
 {
 	if (shiftKeyIsDown)
+	{
+		if (event.metaKey || event.ctrlKey || event.altKey)
+		{
+			shiftKeyIsDown = false;
+			foregroundColorSelector.container.style.visibility = 'hidden';
+		}
 		return;
+	}
 
 	switch(event.keyCode)
 	{
 		case 16: // Shift
+			if (event.metaKey || event.ctrlKey || event.altKey)
+				break;
 			shiftKeyIsDown = true;
 			foregroundColorSelector.container.style.left = mouseX - 125 + 'px';
 			foregroundColorSelector.container.style.top = mouseY - 125 + 'px';
