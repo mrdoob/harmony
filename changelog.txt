@@ -1,3 +1,8 @@
+* rev. 10 - 2026 07 11
+
+- New toolbar UI, light/dark theme, brush-size slider and .harmony save/load. (@barakbl)
+
+
 * rev. 9 - 2025 02 27
 
 - Improved color selector.
